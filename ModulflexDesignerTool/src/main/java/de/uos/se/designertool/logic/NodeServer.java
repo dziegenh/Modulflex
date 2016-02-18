@@ -3,7 +3,6 @@ package de.uos.se.designertool.logic;
 import de.uos.se.designertool.logic.nodeserverlogic.ModulflexNode;
 import javafx.beans.property.*;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,7 +21,7 @@ public class NodeServer
 
     private final BooleanProperty noLog;
 
-    private final List<ModulflexNode> children;
+    private final ListProperty<ModulflexNode> children;
 
     /**
      * Creates a new node server. The parameters are mostly not primitive to allow <code>null</code>-values in case of the absence of non-required values.
@@ -76,18 +75,11 @@ public class NodeServer
             this.noLog = new SimpleBooleanProperty(noLog);
         }
 
-        if (Objects.isNull(children))
+        this.children = new SimpleListProperty<>();
+        if (Objects.nonNull(children))
         {
-            this.children = new LinkedList<>();
-        } else
-        {
-            this.children = children;
+            this.children.addAll(children);
         }
-    }
-
-    public double getCycleTime()
-    {
-        return cycleTime.get();
     }
 
     public DoubleProperty cycleTimeProperty()
@@ -95,19 +87,9 @@ public class NodeServer
         return cycleTime;
     }
 
-    public boolean getProfiling()
-    {
-        return profiling.get();
-    }
-
     public BooleanProperty profilingProperty()
     {
         return profiling;
-    }
-
-    public String getLogDir()
-    {
-        return logDir.get();
     }
 
     public StringProperty logDirProperty()
@@ -115,19 +97,9 @@ public class NodeServer
         return logDir;
     }
 
-    public String getLogLevel()
-    {
-        return logLevel.get();
-    }
-
     public StringProperty logLevelProperty()
     {
         return logLevel;
-    }
-
-    public boolean getNoLog()
-    {
-        return noLog.get();
     }
 
     public BooleanProperty noLogProperty()
@@ -135,7 +107,7 @@ public class NodeServer
         return noLog;
     }
 
-    public List<ModulflexNode> getChildren()
+    public ListProperty<ModulflexNode> childrenProperty()
     {
         return children;
     }
