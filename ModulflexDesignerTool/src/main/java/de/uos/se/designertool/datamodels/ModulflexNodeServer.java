@@ -19,6 +19,7 @@ import java.util.Objects;
  * For convenience all values are handled by Properties (See {@linkplain Property}). This also means values can be changed after creation.
  * The getter and setter methods are private since they need to be exclusively accessed by JAXB.
  */
+@SuppressWarnings ("unused")
 @XmlRootElement (name = "Nodeserver")
 public class ModulflexNodeServer
 {
@@ -106,7 +107,8 @@ public class ModulflexNodeServer
      * @param cycleTime
      *         The cycle time for the node server.
      */
-    public ModulflexNodeServer(double cycleTime)
+    @SuppressWarnings ("WeakerAccess")
+    public ModulflexNodeServer(@SuppressWarnings ("SameParameterValue") double cycleTime)
     {
         this(cycleTime, null, null, null, null, null);
     }
@@ -219,12 +221,12 @@ public class ModulflexNodeServer
     @Override
     public int hashCode()
     {
-        int result = cycleTime.hashCode();
-        result = 31 * result + profiling.hashCode();
-        result = 31 * result + logDir.hashCode();
-        result = 31 * result + logLevel.hashCode();
-        result = 31 * result + noLog.hashCode();
-        result = 31 * result + children.hashCode();
+        int result = cycleTime.getValue().hashCode();
+        result = 31 * result + Objects.hashCode(profiling.getValue());
+        result = 31 * result + Objects.hashCode(logDir.getValue());
+        result = 31 * result + Objects.hashCode(logLevel.getValue());
+        result = 31 * result + Objects.hashCode(noLog.getValue());
+        //   result = 31 * result + children.hashCode();
         return result;
     }
 
@@ -238,17 +240,31 @@ public class ModulflexNodeServer
 
         ModulflexNodeServer that = (ModulflexNodeServer) o;
 
-        if (! cycleTime.equals(that.cycleTime))
+        // properties inherit equals() from object, which is problematic for a useful comparison
+
+        if (this.getCycleTime() != that.getCycleTime())
+        {
             return false;
-        if (! profiling.equals(that.profiling))
+        }
+        if (this.getNoLog() != that.getNoLog())
+        {
             return false;
-        if (! logDir.equals(that.logDir))
+        }
+        if (this.getProfiling() != that.getProfiling())
+        {
             return false;
-        if (! logLevel.equals(that.logLevel))
+        }
+        if (! Objects.equals(this.getLogDir(), that.getLogDir()))
+        {
             return false;
-        if (! noLog.equals(that.noLog))
+        }
+        if (! Objects.equals(this.getLogLevel(), that.getLogLevel()))
+        {
             return false;
-        return children.equals(that.children);
+        }
+        // TODO: Incorporate children, they must implement equals() therefore
+        //return this.getChildren().equals(that.getChildren());
+        return true;
 
     }
 
