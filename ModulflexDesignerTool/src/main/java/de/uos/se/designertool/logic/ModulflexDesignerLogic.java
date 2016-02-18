@@ -1,6 +1,6 @@
 package de.uos.se.designertool.logic;
 
-import de.uos.se.designertool.logic.nodeserverlogic.ModulflexNodeServer;
+import de.uos.se.designertool.datamodels.ModulflexNodeServer;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 

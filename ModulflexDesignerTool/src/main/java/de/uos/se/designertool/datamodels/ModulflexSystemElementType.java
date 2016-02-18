@@ -1,4 +1,4 @@
-package de.uos.se.designertool.logic.nodeserverlogic;
+package de.uos.se.designertool.datamodels;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;

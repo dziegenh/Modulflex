@@ -9,7 +9,7 @@ import java.util.List;
 public class LogicModule <T>
 {
 
-    private List<IModuleListener<T>> listeners = new LinkedList<>();
+    private List<ILogicModuleListener<T>> listeners = new LinkedList<>();
 
     public void fireEvent()
     {
@@ -18,13 +18,13 @@ public class LogicModule <T>
 
     public void fireEvent(T data)
     {
-        for (IModuleListener<T> listener : listeners)
+        for (ILogicModuleListener<T> listener : listeners)
         {
             listener.eventFired(data);
         }
     }
 
-    public void addListener(IModuleListener<T> listener)
+    public void addListener(ILogicModuleListener<T> listener)
     {
         this.listeners.add(listener);
     }

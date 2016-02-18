@@ -1,10 +1,11 @@
 package de.uos.se.designertool.gui.systemtree;
 
-import de.uos.se.designertool.logic.LogicModule;
-import de.uos.se.designertool.logic.nodeserverlogic.ModulflexModule;
-import de.uos.se.designertool.logic.nodeserverlogic.ModulflexNode;
-import de.uos.se.designertool.logic.nodeserverlogic.ModulflexNodeServer;
-import de.uos.se.designertool.logic.nodeserverlogic.ModulflexSystemElementType;
+import de.uos.se.designertool.datamodels.ModulflexModule;
+import de.uos.se.designertool.datamodels.ModulflexNode;
+import de.uos.se.designertool.datamodels.ModulflexNodeServer;
+import de.uos.se.designertool.datamodels.ModulflexSystemElementType;
+import de.uos.se.designertool.logic.NodeServerAddedModule;
+import de.uos.se.designertool.logic.SystemElementTypeChangedModule;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -39,8 +40,11 @@ public class SystemtreePresenter
     ObjectProperty<ModulflexModule> current;
 
     @Inject
-    LogicModule<ModulflexSystemElementType> logicModule;
-    
+    SystemElementTypeChangedModule logicModule;
+
+    @Inject
+    NodeServerAddedModule naModule;
+
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
@@ -67,7 +71,7 @@ public class SystemtreePresenter
                 }
             }
         });
-
+        naModule.addListener(data -> ns.setValue(data) );
         treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             ModulflexSystemElementType value = newValue.getValue();
             System.out.println(value);

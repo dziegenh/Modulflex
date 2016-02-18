@@ -1,4 +1,4 @@
-package de.uos.se.designertool.logic.nodeserverlogic;
+package de.uos.se.designertool.datamodels;
 
 
 import de.uos.se.xsd2gui.models.RootModel;

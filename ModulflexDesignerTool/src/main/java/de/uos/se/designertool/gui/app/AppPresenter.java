@@ -1,14 +1,14 @@
 package de.uos.se.designertool.gui.app;
 
-import de.uos.se.designertool.gui.systemtree.SystemtreePresenter;
+import de.uos.se.designertool.datamodels.ModulflexModule;
+import de.uos.se.designertool.datamodels.ModulflexNode;
+import de.uos.se.designertool.datamodels.ModulflexNodeServer;
+import de.uos.se.designertool.datamodels.ModulflexSystemElementType;
 import de.uos.se.designertool.gui.systemtree.SystemtreeView;
-import de.uos.se.designertool.logic.IModuleListener;
-import de.uos.se.designertool.logic.LogicModule;
+import de.uos.se.designertool.logic.ILogicModuleListener;
 import de.uos.se.designertool.logic.ModulflexDesignerLogic;
-import de.uos.se.designertool.logic.nodeserverlogic.ModulflexModule;
-import de.uos.se.designertool.logic.nodeserverlogic.ModulflexNode;
-import de.uos.se.designertool.logic.nodeserverlogic.ModulflexNodeServer;
-import de.uos.se.designertool.logic.nodeserverlogic.ModulflexSystemElementType;
+import de.uos.se.designertool.logic.NodeServerAddedModule;
+import de.uos.se.designertool.logic.SystemElementTypeChangedModule;
 import de.uos.se.xsd2gui.generators.*;
 import de.uos.se.xsd2gui.models.RootModel;
 import de.uos.se.xsd2gui.models.XSDModel;
@@ -30,6 +30,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +41,7 @@ import java.util.logging.Logger;
 /**
  * @author dziegenhagen
  */
-@SuppressWarnings("unused")
+@SuppressWarnings ("unused")
 public class AppPresenter
         implements Initializable
 {
@@ -58,16 +59,26 @@ public class AppPresenter
     WidgetFactory widgetFactory;
     ObjectProperty<ModulflexModule> currentSelected;
     @Inject
-    LogicModule<ModulflexSystemElementType> logicModule;
+    SystemElementTypeChangedModule logicModule;
     private String XSD_BASE_DIR;
-    private DocumentBuilder _documentBuilder;
+    private DocumentBuilder documentBuilder;
+
+    @Inject
+    NodeServerAddedModule naModule;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
         URL configDir = Thread.currentThread().getContextClassLoader().getResource("config");
         // todo check dir existance :)
-        this.XSD_BASE_DIR = configDir.getFile() + File.separator;
+        try
+        {
+            this.XSD_BASE_DIR = configDir.toURI().getPath() + File.separator;
+        }
+        catch (URISyntaxException e)
+        {
+            throw new RuntimeException(e);
+        }
 
         models = new SimpleObjectProperty<>(new HashMap<>());
         widgetFactory = new WidgetFactory();
@@ -75,8 +86,8 @@ public class AppPresenter
         widgetFactory.addWidgetGenerator(new SimpleTypeParser());
         widgetFactory.addWidgetGenerator(new ContainerParser());
         widgetFactory.addWidgetGenerator(new BasicSequenceParser());
-        widgetFactory
-                .addWidgetGenerator(new CustomTypesParser("ct:", XSD_BASE_DIR + "predefined\\CommonTypes.xsd"));
+        widgetFactory.addWidgetGenerator(
+                new CustomTypesParser("ct:", XSD_BASE_DIR + "predefined\\CommonTypes.xsd"));
         widgetFactory.addWidgetGenerator(
                 new CustomTypesParser("st:", XSD_BASE_DIR + "predefined\\StructuredTypes.xsd"));
 
@@ -87,8 +98,9 @@ public class AppPresenter
 
         try
         {
-            _documentBuilder = factory.newDocumentBuilder();
-        } catch (ParserConfigurationException e)
+            documentBuilder = factory.newDocumentBuilder();
+        }
+        catch (ParserConfigurationException e)
         {
             throw new RuntimeException(e);
         }
@@ -97,16 +109,14 @@ public class AppPresenter
         currentSelected = new SimpleObjectProperty<>();
         ns = new SimpleObjectProperty<>();
         elems = new SimpleListProperty<>();
-        ((SystemtreePresenter) systemTreeView.getPresenter()).nodeServerProperty()
-                .bindBidirectional(logic.nodeServerProperty());
-        ((SystemtreePresenter) systemTreeView.getPresenter()).currentProperty().bindBidirectional(currentSelected);
-//
-//        currentSelected.addListener((observable1, oldValue1, newValue1) -> {
-//            System.out.println(observable1);
-//            rightPane.contentProperty().setValue(models.get().get(observable1.getValue().rootModelProperty().get()));
-//        });
+        //
+        //        currentSelected.addListener((observable1, oldValue1, newValue1) -> {
+        //            System.out.println(observable1);
+        //            rightPane.contentProperty().setValue(models.get().get(observable1.getValue
+        // ().rootModelProperty().get()));
+        //        });
 
-        logicModule.addListener(new IModuleListener<ModulflexSystemElementType>()
+        logicModule.addListener(new ILogicModuleListener<ModulflexSystemElementType>()
         {
 
             @Override
@@ -114,16 +124,21 @@ public class AppPresenter
             {
                 if (element instanceof ModulflexModule)
                 {
-                    rightPane.contentProperty().setValue(models.get().get(((ModulflexModule) element).rootModelProperty().getValue()));
+                    rightPane.contentProperty().setValue(models.get()
+                                                               .get(((ModulflexModule) element)
+                                                                            .rootModelProperty()
+                                                                            .getValue()));
                 }
             }
 
         });
 
+
         leftContent.getChildren().add(systemTreeView.getView());
         logic.nodeServerProperty().bindBidirectional(ns);
         ns.addListener((observable, oldValue, newValue) -> load(newValue));
         ModulflexNodeServer server = new ModulflexNodeServer();
+        naModule.fireEvent(server);
         load(server);
         ns.setValue(server);
         addDummys();
@@ -137,10 +152,9 @@ public class AppPresenter
 
     private void addDummys()
     {
-        String[] filenames = new String[]
-        {
-            XSD_BASE_DIR + "components\\PWM.xsd", XSD_BASE_DIR + "components\\AnalogDigitalConverter.xsd", XSD_BASE_DIR + "components\\DigitalIO.xsd"
-        };
+        String[] filenames = new String[] {XSD_BASE_DIR + "components\\PWM.xsd",
+                                           XSD_BASE_DIR + "components\\AnalogDigitalConverter.xsd",
+                                           XSD_BASE_DIR + "components\\DigitalIO.xsd"};
         Map<XSDModel, Pane> dummyModels = new HashMap<>();
         for (int i = 0; i < 6; i++)
         {
@@ -152,14 +166,16 @@ public class AppPresenter
                 {
 
                     VBox currentContent = new VBox();
-                    Document doc = _documentBuilder.parse(filename);
+                    Document doc = documentBuilder.parse(filename);
                     // Generated widgets are added to the root node
-                    RootModel model = widgetFactory
-                            .parseXsd(doc, currentContent, filename.replaceAll("\\" + File.separator, "/"));
+                    RootModel model = widgetFactory.parseXsd(doc, currentContent,
+                                                             filename.replaceAll(
+                                                                     "\\" + File.separator, "/"));
                     dummyModels.put(model, currentContent);
                     myNode.modulesProperty().add(new ModulflexModule(i, "testname", new File(
                             "." + File.separator + "testname" + i + "xsd"), model));
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     Logger.getLogger(AppPresenter.class.getName()).log(Level.SEVERE, null, ex);
                 }

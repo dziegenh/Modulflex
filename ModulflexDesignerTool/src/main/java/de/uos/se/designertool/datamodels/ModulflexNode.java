@@ -1,4 +1,4 @@
-package de.uos.se.designertool.logic.nodeserverlogic;
+package de.uos.se.designertool.datamodels;
 
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.beans.property.ListProperty;

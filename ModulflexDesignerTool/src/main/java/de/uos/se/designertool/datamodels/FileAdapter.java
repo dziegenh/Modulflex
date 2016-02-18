@@ -1,4 +1,4 @@
-package de.uos.se.designertool.logic.nodeserverlogic;
+package de.uos.se.designertool.datamodels;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.io.File;
