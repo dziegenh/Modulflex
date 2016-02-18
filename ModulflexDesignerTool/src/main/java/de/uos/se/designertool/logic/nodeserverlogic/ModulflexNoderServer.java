@@ -1,6 +1,5 @@
-package de.uos.se.designertool.logic;
+package de.uos.se.designertool.logic.nodeserverlogic;
 
-import de.uos.se.designertool.logic.nodeserverlogic.ModulflexNode;
 import javafx.beans.property.*;
 
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.Objects;
 /**
  * Created by sem on 18.02.2016.
  */
-public class NodeServer
+public class ModulflexNoderServer
 {
     private final DoubleProperty cycleTime;
 
@@ -39,7 +38,7 @@ public class NodeServer
      * @param children
      *         A list of children. Not required.
      */
-    private NodeServer(double cycleTime, Boolean profiling, String logDir, String logLevel, Boolean noLog, List<ModulflexNode> children)
+    private ModulflexNoderServer(double cycleTime, Boolean profiling, String logDir, String logLevel, Boolean noLog, List<ModulflexNode> children)
     {
         this.cycleTime = new SimpleDoubleProperty(cycleTime);
 
@@ -111,4 +110,55 @@ public class NodeServer
     {
         return children;
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        ModulflexNoderServer that = (ModulflexNoderServer) o;
+
+        if (! cycleTime.equals(that.cycleTime))
+            return false;
+        if (! profiling.equals(that.profiling))
+            return false;
+        if (! logDir.equals(that.logDir))
+            return false;
+        if (! logLevel.equals(that.logLevel))
+            return false;
+        if (! noLog.equals(that.noLog))
+            return false;
+        return children.equals(that.children);
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = cycleTime.hashCode();
+        result = 31 * result + profiling.hashCode();
+        result = 31 * result + logDir.hashCode();
+        result = 31 * result + logLevel.hashCode();
+        result = 31 * result + noLog.hashCode();
+        result = 31 * result + children.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "ModulflexNoderServer{" +
+                "cycleTime=" + cycleTime +
+                ", profiling=" + profiling +
+                ", logDir=" + logDir +
+                ", logLevel=" + logLevel +
+                ", noLog=" + noLog +
+                ", children=" + children +
+                '}';
+    }
+
+
 }
