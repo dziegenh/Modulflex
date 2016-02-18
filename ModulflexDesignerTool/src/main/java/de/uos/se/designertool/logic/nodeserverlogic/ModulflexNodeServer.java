@@ -5,7 +5,9 @@ import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import org.eclipse.persistence.oxm.annotations.XmlPath;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -91,6 +93,9 @@ public class ModulflexNodeServer
         if (Objects.nonNull(children))
         {
             this.children.setValue(new ObservableListWrapper<>(children));
+        } else
+        {
+            this.children.setValue(new ObservableListWrapper<>(new LinkedList<>()));
         }
     }
 
@@ -193,6 +198,7 @@ public class ModulflexNodeServer
         this.noLog.set(noLog);
     }
 
+    @XmlElement (name = "children")
     private ObservableList<ModulflexNode> getChildren()
     {
         return children.get();

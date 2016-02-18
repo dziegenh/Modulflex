@@ -3,7 +3,10 @@ package de.uos.se.designertool.logic.nodeserverlogic;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
+import org.eclipse.persistence.oxm.annotations.XmlPath;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,9 +14,12 @@ import java.util.List;
 /**
  * Created by sem on 18.02.2016.
  */
+@XmlRootElement (name = "module")
 public class ModulflexNode
         extends ModulflexSystemElementType
 {
+    //TODO change this later
+    @XmlTransient
     private final ListProperty<ModulflexModule> _children;
 
     public ModulflexNode(int id, String name)
@@ -36,6 +42,28 @@ public class ModulflexNode
     public ListProperty<ModulflexModule> modulesProperty()
     {
         return this._children;
+    }
+
+    @XmlPath ("node/@id")
+    private int get_id()
+    {
+        return _id.get();
+    }
+
+    private void set_id(int _id)
+    {
+        this._id.set(_id);
+    }
+
+    @XmlPath ("node/@name")
+    private String get_name()
+    {
+        return _name.get();
+    }
+
+    private void set_name(String _name)
+    {
+        this._name.set(_name);
     }
 
     @Override
