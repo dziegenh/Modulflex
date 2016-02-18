@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +14,8 @@ import java.util.List;
  */
 public class ModulflexNodeServerTest
 {
-
-
     @Test
-    public void testMarshalling() throws Exception
+    public void test() throws Exception
     {
         final File xmlFile = new File("nsTest.xml");
 
@@ -36,17 +33,14 @@ public class ModulflexNodeServerTest
         modulflexModules.add(new ModulflexModule(0, "SystemConfig", new File("./modules/SystemConfig.xml")));
         modulflexNode.modulesProperty().setValue(new ObservableListWrapper<>(modulflexModules));
 
-        ModulflexNodeServer modulflexNodeServer = new ModulflexNodeServer(.3, null, null, null, null, nsChildren);
+        ModulflexNodeServer modulflexNodeServer = new ModulflexNodeServer(5, false, null, null, null, nsChildren);
 
         JAXBContext jaxbContext = JAXBContext.newInstance(ModulflexNodeServer.class);
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
+        marshaller.setProperty(Marshaller.JAXB_NO_NAMESPACE_SCHEMA_LOCATION, "src/main/resources/config/schema.xsd");
         marshaller.marshal(modulflexNodeServer, xmlFile);
 
-        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        ModulflexNodeServer modulflexNodeServerUnmarshalled = (ModulflexNodeServer) unmarshaller.unmarshal(xmlFile);
-        //    assertEquals(modulflexNodeServer, modulflexNodeServerUnmarshalled);
-
+        // TODO: validate and check that unmarshalling works
     }
 }

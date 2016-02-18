@@ -4,10 +4,10 @@ import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.ObservableList;
-import org.eclipse.persistence.oxm.annotations.XmlPath;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,8 +19,6 @@ import java.util.List;
 public class ModulflexNode
         extends ModulflexSystemElementType
 {
-    //TODO change this later
-    @XmlTransient
     private final ListProperty<ModulflexModule> _children;
 
     public ModulflexNode(int id, String name)
@@ -45,13 +43,14 @@ public class ModulflexNode
         return this._children;
     }
 
-    @XmlElement (name = "children")
-    private ObservableList<ModulflexModule> getModules()
+    @XmlElementWrapper (name = "children")
+    @XmlElement (name = "module")
+    private ObservableList<ModulflexModule> getChildren()
     {
         return this._children.getValue();
     }
 
-    @XmlPath ("node/@id")
+    @XmlAttribute (name = "id")
     private int get_id()
     {
         return _id.get();
@@ -62,7 +61,7 @@ public class ModulflexNode
         this._id.set(_id);
     }
 
-    @XmlPath ("node/@name")
+    @XmlAttribute (name = "name")
     private String get_name()
     {
         return _name.get();

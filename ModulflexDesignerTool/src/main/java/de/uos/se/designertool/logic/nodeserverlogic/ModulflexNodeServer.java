@@ -1,12 +1,12 @@
 package de.uos.se.designertool.logic.nodeserverlogic;
 
 import com.sun.javafx.collections.ObservableListWrapper;
-import java.util.LinkedList;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import org.eclipse.persistence.oxm.annotations.XmlPath;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.LinkedList;
 import java.util.List;
@@ -95,10 +95,6 @@ public class ModulflexNodeServer
         {
             this.children.setValue(new ObservableListWrapper<>(children));
         } else
-        {
-            this.children.setValue(new ObservableListWrapper<>(new LinkedList<>()));
-        }
-        else
         {
             this.children.setValue(new ObservableListWrapper<>(new LinkedList<>()));
         }
@@ -203,7 +199,8 @@ public class ModulflexNodeServer
         this.noLog.set(noLog);
     }
 
-    @XmlElement (name = "children")
+    @XmlElementWrapper (name = "children")
+    @XmlElement (name = "node")
     private ObservableList<ModulflexNode> getChildren()
     {
         return children.get();

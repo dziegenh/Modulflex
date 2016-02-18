@@ -5,8 +5,8 @@ import de.uos.se.xsd2gui.models.RootModel;
 import de.uos.se.xsd2gui.models.XSDModel;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import org.eclipse.persistence.oxm.annotations.XmlPath;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.File;
 
@@ -48,7 +48,7 @@ public class ModulflexModule
         return _rootModel;
     }
 
-    @XmlPath ("module/@id")
+    @XmlAttribute (name = "id")
     private int get_id()
     {
         return _id.get();
@@ -59,7 +59,7 @@ public class ModulflexModule
         this._id.set(_id);
     }
 
-    @XmlPath ("module/@name")
+    @XmlAttribute (name = "name")
     private String get_name()
     {
         return _name.get();
@@ -71,7 +71,7 @@ public class ModulflexModule
     }
 
     @XmlJavaTypeAdapter (FileAdapter.class)
-    @XmlPath ("module/@parameterFile")
+    @XmlAttribute (name = "parameterFile")
     private File get_parameterFile()
     {
         return this._parameterFile.get();
