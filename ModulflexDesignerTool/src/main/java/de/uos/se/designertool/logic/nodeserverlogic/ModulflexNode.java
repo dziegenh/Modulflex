@@ -12,11 +12,9 @@ import java.util.Observable;
  * Created by sem on 18.02.2016.
  */
 public class ModulflexNode
-        extends Observable
+        extends SystemElementType
 {
     private final ListProperty<ModulflexModule> _children;
-    private final IntegerProperty _id;
-    private final StringProperty _name;
 
     public ModulflexNode(int id, String name)
     {
@@ -25,24 +23,19 @@ public class ModulflexNode
 
     public ModulflexNode(int id, String name, List<ModulflexModule> children)
     {
+        super(id, name);
         this._children = new SimpleListProperty<>(new ObservableListWrapper<>(new LinkedList<>(children)));
-        this._id = new SimpleIntegerProperty(id);
-        this._name = new SimpleStringProperty(name);
-    }
-
-    public StringProperty nameProperty()
-    {
-        return this._name;
-    }
-
-    public IntegerProperty idProperty()
-    {
-        return this._id;
     }
 
     public ListProperty<ModulflexModule> modulesProperty()
     {
         return this._children;
+    }
+
+    @Override
+    public String toString()
+    {
+        return _name.get() + _id.get();
     }
 
 }

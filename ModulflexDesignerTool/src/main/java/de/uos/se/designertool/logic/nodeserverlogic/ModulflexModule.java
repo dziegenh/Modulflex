@@ -1,6 +1,8 @@
 package de.uos.se.designertool.logic.nodeserverlogic;
 
 
+import de.uos.se.xsd2gui.models.RootModel;
+import de.uos.se.xsd2gui.models.XSDModel;
 import javafx.beans.property.*;
 
 import java.io.File;
@@ -10,37 +12,37 @@ import java.util.Observable;
  * Created by sem on 18.02.2016.
  */
 public class ModulflexModule
-        extends Observable
+        extends SystemElementType
 {
-    private final IntegerProperty _id;
-    private final StringProperty _name;
     private final ObjectProperty<File> _parameterFile;
+    private final ObjectProperty<XSDModel> _rootModel;
 
     public ModulflexModule(int id, String name, File parameterFile)
     {
-        this._id = new SimpleIntegerProperty(id);
-        this._name = new SimpleStringProperty(name);
+        this(id, name, parameterFile, null);
+    }
+
+    public ModulflexModule(int id, String name, File parameterFile, RootModel model)
+    {
+        super(id, name);
         this._parameterFile = new SimpleObjectProperty<>(parameterFile);
-    }
-
-    public ModulflexModule(int id, String name)
-    {
-        this(id, name, null);
-    }
-
-    public IntegerProperty idProperty()
-    {
-        return _id;
-    }
-
-
-    public StringProperty nameProperty()
-    {
-        return _name;
+        this._rootModel = new SimpleObjectProperty<>(model);
     }
 
     public ObjectProperty<File> parameterFileProperty()
     {
         return _parameterFile;
+    }
+
+
+    public ObjectProperty<XSDModel> rootModelProperty()
+    {
+        return _rootModel;
+    }
+
+    @Override
+    public String toString()
+    {
+        return _name.get()+_id.get();
     }
 }
