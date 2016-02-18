@@ -1,7 +1,11 @@
 package de.uos.se.designertool.logic.nodeserverlogic;
 
+import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.beans.property.*;
+import javafx.collections.ObservableList;
+import org.eclipse.persistence.oxm.annotations.XmlPath;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,18 +14,20 @@ import java.util.Objects;
  * <p>
  * This class represents a node server. This is the top-level element in a topology.
  * For convenience all values are handled by Properties (See {@linkplain Property}). This also means values can be changed after creation.
+ * The getter and setter methods are private since they need to be exclusively accessed by JAXB.
  */
+@XmlRootElement (name = "Nodeserver")
 public class ModulflexNodeServer
 {
     private final DoubleProperty cycleTime;
 
-    private final BooleanProperty profiling;
+    private final ObjectProperty<Boolean> profiling;
 
     private final StringProperty logDir;
 
     private final StringProperty logLevel;
 
-    private final BooleanProperty noLog;
+    private final ObjectProperty<Boolean> noLog;
 
     private final ListProperty<ModulflexNode> children;
 
@@ -41,16 +47,20 @@ public class ModulflexNodeServer
      * @param children
      *         A list of children. Not required.
      */
-    private ModulflexNodeServer(double cycleTime, Boolean profiling, String logDir, String logLevel, Boolean noLog, List<ModulflexNode> children)
+    public ModulflexNodeServer(double cycleTime, Boolean profiling, String logDir, String logLevel, Boolean noLog, List<ModulflexNode> children)
     {
+        /*
+         * BooleanProperty does not support null values, therefore ObjectProperty<Boolean> is used instead.
+         */
+
         this.cycleTime = new SimpleDoubleProperty(cycleTime);
 
         if (Objects.isNull(profiling))
         {
-            this.profiling = new SimpleBooleanProperty();
+            this.profiling = new SimpleObjectProperty<>();
         } else
         {
-            this.profiling = new SimpleBooleanProperty(profiling);
+            this.profiling = new SimpleObjectProperty<>(profiling);
         }
 
         if (Objects.isNull(logDir))
@@ -71,16 +81,16 @@ public class ModulflexNodeServer
 
         if (Objects.isNull(noLog))
         {
-            this.noLog = new SimpleBooleanProperty();
+            this.noLog = new SimpleObjectProperty<>();
         } else
         {
-            this.noLog = new SimpleBooleanProperty(noLog);
+            this.noLog = new SimpleObjectProperty<>(noLog);
         }
 
         this.children = new SimpleListProperty<>();
         if (Objects.nonNull(children))
         {
-            this.children.addAll(children);
+            this.children.setValue(new ObservableListWrapper<>(children));
         }
     }
 
@@ -95,14 +105,50 @@ public class ModulflexNodeServer
         this(cycleTime, null, null, null, null, null);
     }
 
+    /**
+     * For JAXB purposes only
+     */
+    public ModulflexNodeServer()
+    {
+        this(.0);
+    }
+
+    @XmlPath ("configuration/@cycleTime")
+    private double getCycleTime()
+    {
+        return cycleTime.get();
+    }
+
     public DoubleProperty cycleTimeProperty()
     {
         return cycleTime;
     }
 
-    public BooleanProperty profilingProperty()
+    private void setCycleTime(double cycleTime)
+    {
+        this.cycleTime.set(cycleTime);
+    }
+
+    @XmlPath ("configuration/@profiling")
+    private Boolean getProfiling()
+    {
+        return profiling.get();
+    }
+
+    public ObjectProperty<Boolean> profilingProperty()
     {
         return profiling;
+    }
+
+    private void setProfiling(Boolean profiling)
+    {
+        this.profiling.set(profiling);
+    }
+
+    @XmlPath ("configuration/@logDir")
+    private String getLogDir()
+    {
+        return logDir.get();
     }
 
     public StringProperty logDirProperty()
@@ -110,19 +156,56 @@ public class ModulflexNodeServer
         return logDir;
     }
 
+    private void setLogDir(String logDir)
+    {
+        this.logDir.set(logDir);
+    }
+
+    @XmlPath ("configuration/@logLevel")
+    private String getLogLevel()
+    {
+        return logLevel.get();
+    }
+
     public StringProperty logLevelProperty()
     {
         return logLevel;
     }
 
-    public BooleanProperty noLogProperty()
+    private void setLogLevel(String logLevel)
+    {
+        this.logLevel.set(logLevel);
+    }
+
+    @XmlPath ("configuration/@noLog")
+    private Boolean getNoLog()
+    {
+        return noLog.get();
+    }
+
+    public ObjectProperty<Boolean> noLogProperty()
     {
         return noLog;
+    }
+
+    private void setNoLog(Boolean noLog)
+    {
+        this.noLog.set(noLog);
+    }
+
+    private ObservableList<ModulflexNode> getChildren()
+    {
+        return children.get();
     }
 
     public ListProperty<ModulflexNode> childrenProperty()
     {
         return children;
+    }
+
+    private void setChildren(ObservableList<ModulflexNode> children)
+    {
+        this.children.set(children);
     }
 
     @Override
