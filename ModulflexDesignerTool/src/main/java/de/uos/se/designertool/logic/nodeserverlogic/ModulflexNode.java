@@ -3,9 +3,10 @@ package de.uos.se.designertool.logic.nodeserverlogic;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.collections.ObservableList;
 import org.eclipse.persistence.oxm.annotations.XmlPath;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * Created by sem on 18.02.2016.
  */
-@XmlRootElement (name = "module")
+
 public class ModulflexNode
         extends ModulflexSystemElementType
 {
@@ -42,6 +43,12 @@ public class ModulflexNode
     public ListProperty<ModulflexModule> modulesProperty()
     {
         return this._children;
+    }
+
+    @XmlElement (name = "children")
+    private ObservableList<ModulflexModule> getModules()
+    {
+        return this._children.getValue();
     }
 
     @XmlPath ("node/@id")
