@@ -1,6 +1,7 @@
 package de.uos.se.designertool.logic.nodeserverlogic;
 
 import com.sun.javafx.collections.ObservableListWrapper;
+import java.util.LinkedList;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import org.eclipse.persistence.oxm.annotations.XmlPath;
@@ -94,6 +95,10 @@ public class ModulflexNodeServer
         {
             this.children.setValue(new ObservableListWrapper<>(children));
         } else
+        {
+            this.children.setValue(new ObservableListWrapper<>(new LinkedList<>()));
+        }
+        else
         {
             this.children.setValue(new ObservableListWrapper<>(new LinkedList<>()));
         }
