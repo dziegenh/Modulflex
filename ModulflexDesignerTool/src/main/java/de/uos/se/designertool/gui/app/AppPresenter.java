@@ -2,10 +2,13 @@ package de.uos.se.designertool.gui.app;
 
 import de.uos.se.designertool.gui.systemtree.SystemtreePresenter;
 import de.uos.se.designertool.gui.systemtree.SystemtreeView;
+import de.uos.se.designertool.logic.ITreeListener;
 import de.uos.se.designertool.logic.ModulflexDesignerLogic;
+import de.uos.se.designertool.logic.TreeLogic;
 import de.uos.se.designertool.logic.nodeserverlogic.ModulflexModule;
 import de.uos.se.designertool.logic.nodeserverlogic.ModulflexNode;
 import de.uos.se.designertool.logic.nodeserverlogic.ModulflexNodeServer;
+import de.uos.se.designertool.logic.nodeserverlogic.ModulflexSystemElementType;
 import de.uos.se.xsd2gui.generators.*;
 import de.uos.se.xsd2gui.models.RootModel;
 import de.uos.se.xsd2gui.models.XSDModel;
@@ -37,11 +40,13 @@ import java.util.logging.Logger;
 /**
  * @author dziegenhagen
  */
-@SuppressWarnings ("unused")
+@SuppressWarnings("unused")
 public class AppPresenter
         implements Initializable
 {
-    private static final String XSD_BASE_DIR = "ModulFlexDesignerTool\\src\\main\\resources\\";
+
+    private String XSD_BASE_DIR;
+
     @Inject
     ModulflexDesignerLogic logic;
     @FXML
@@ -62,9 +67,16 @@ public class AppPresenter
     ObjectProperty<ModulflexModule> currentSelected;
     private DocumentBuilder _documentBuilder;
 
+    @Inject
+    TreeLogic treeLogic;
+
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
+        URL configDir = AppPresenter.class.getClassLoader().getResource("config");
+        // todo check dir existance :)
+        this.XSD_BASE_DIR = configDir.getFile() + File.separator;
+
         models = new SimpleObjectProperty<>(new HashMap<>());
         widgetFactory = new WidgetFactory();
         widgetFactory.addWidgetGenerator(new BasicAttributeParser());
@@ -72,9 +84,9 @@ public class AppPresenter
         widgetFactory.addWidgetGenerator(new ContainerParser());
         widgetFactory.addWidgetGenerator(new BasicSequenceParser());
         widgetFactory
-                .addWidgetGenerator(new CustomTypesParser("ct:", XSD_BASE_DIR + "config\\predefined\\CommonTypes.xsd"));
+                .addWidgetGenerator(new CustomTypesParser("ct:", XSD_BASE_DIR + "predefined\\CommonTypes.xsd"));
         widgetFactory.addWidgetGenerator(
-                new CustomTypesParser("st:", XSD_BASE_DIR + "config\\predefined\\StructuredTypes.xsd"));
+                new CustomTypesParser("st:", XSD_BASE_DIR + "predefined\\StructuredTypes.xsd"));
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setIgnoringComments(true);
@@ -89,17 +101,32 @@ public class AppPresenter
             throw new RuntimeException(e);
         }
         systemTreeView = new SystemtreeView();
+
         currentSelected = new SimpleObjectProperty<>();
         ns = new SimpleObjectProperty<>();
         elems = new SimpleListProperty<>();
         ((SystemtreePresenter) systemTreeView.getPresenter()).nodeServerProperty()
-                                                             .bindBidirectional(logic.nodeServerProperty());
+                .bindBidirectional(logic.nodeServerProperty());
         ((SystemtreePresenter) systemTreeView.getPresenter()).currentProperty().bindBidirectional(currentSelected);
+//
+//        currentSelected.addListener((observable1, oldValue1, newValue1) -> {
+//            System.out.println(observable1);
+//            rightPane.contentProperty().setValue(models.get().get(observable1.getValue().rootModelProperty().get()));
+//        });
 
-        currentSelected.addListener((observable1, oldValue1, newValue1) -> {
-            System.out.println(observable1);
-            rightPane.contentProperty().setValue(models.get().get(observable1.getValue().rootModelProperty().get()));
+        treeLogic.addListener(new ITreeListener()
+        {
+            @Override
+            public void selectionChanged(ModulflexSystemElementType element)
+            {
+                if (element instanceof ModulflexModule)
+                {
+                    rightPane.contentProperty().setValue(models.get().get(((ModulflexModule) element).rootModelProperty().getValue()));
+                }
+            }
+
         });
+
         leftContent.getChildren().add(systemTreeView.getView());
         logic.nodeServerProperty().bindBidirectional(ns);
         ns.addListener((observable, oldValue, newValue) -> load(newValue));
@@ -117,7 +144,10 @@ public class AppPresenter
 
     private void addDummys()
     {
-        String[] filenames = new String[] {XSD_BASE_DIR + "config\\components\\PWM.xsd", XSD_BASE_DIR + "config\\components\\PWM.xsd", XSD_BASE_DIR + "config\\components\\DigitalIO.xsd"};
+        String[] filenames = new String[]
+        {
+            XSD_BASE_DIR + "components\\PWM.xsd", XSD_BASE_DIR + "components\\AnalogDigitalConverter.xsd", XSD_BASE_DIR + "components\\DigitalIO.xsd"
+        };
         Map<XSDModel, Pane> dummyModels = new HashMap<>();
         for (int i = 0; i < 6; i++)
         {
