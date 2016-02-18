@@ -29,11 +29,17 @@ public class ModulflexModule
         this._rootModel = new SimpleObjectProperty<>(model);
     }
 
+    public ModulflexModule()
+    {
+        super();
+        this._parameterFile = new SimpleObjectProperty<>();
+        this._rootModel = new SimpleObjectProperty<>();
+    }
+
     public ObjectProperty<File> parameterFileProperty()
     {
         return _parameterFile;
     }
-
 
     public ObjectProperty<XSDModel> rootModelProperty()
     {

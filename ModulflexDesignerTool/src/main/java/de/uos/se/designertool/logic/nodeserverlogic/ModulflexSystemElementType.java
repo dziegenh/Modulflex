@@ -22,6 +22,12 @@ public class ModulflexSystemElementType
         this._name = new SimpleStringProperty(name);
     }
 
+    public ModulflexSystemElementType()
+    {
+        this._id = new SimpleIntegerProperty();
+        this._name = new SimpleStringProperty();
+    }
+
     public StringProperty nameProperty()
     {
         return this._name;

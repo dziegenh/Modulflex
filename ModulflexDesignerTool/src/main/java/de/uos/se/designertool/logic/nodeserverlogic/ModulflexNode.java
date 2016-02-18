@@ -27,6 +27,12 @@ public class ModulflexNode
         this._children = new SimpleListProperty<>(new ObservableListWrapper<>(new LinkedList<>(children)));
     }
 
+    public ModulflexNode()
+    {
+        super();
+        this._children = new SimpleListProperty<>(new ObservableListWrapper<>(new LinkedList<>()));
+    }
+
     public ListProperty<ModulflexModule> modulesProperty()
     {
         return this._children;
