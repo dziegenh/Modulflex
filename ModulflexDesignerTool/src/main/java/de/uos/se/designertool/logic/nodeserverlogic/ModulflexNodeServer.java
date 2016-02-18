@@ -7,6 +7,9 @@ import java.util.Objects;
 
 /**
  * Created by sem on 18.02.2016.
+ * <p>
+ * This class represents a node server. This is the top-level element in a topology.
+ * For convenience all values are handled by Properties (See {@linkplain Property}). This also means values can be changed after creation.
  */
 public class ModulflexNodeServer
 {
@@ -79,6 +82,17 @@ public class ModulflexNodeServer
         {
             this.children.addAll(children);
         }
+    }
+
+    /**
+     * Convenience constructor that only needs arguments that are required for a node server.
+     *
+     * @param cycleTime
+     *         The cycle time for the node server.
+     */
+    public ModulflexNodeServer(double cycleTime)
+    {
+        this(cycleTime, null, null, null, null, null);
     }
 
     public DoubleProperty cycleTimeProperty()
