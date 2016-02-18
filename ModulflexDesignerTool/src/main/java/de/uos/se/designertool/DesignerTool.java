@@ -8,8 +8,7 @@ import javafx.stage.Stage;
 
 
 public class DesignerTool
-        extends Application
-{
+        extends Application {
 
     @Override
     public void start(Stage stage) throws Exception
