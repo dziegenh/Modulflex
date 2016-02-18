@@ -3,16 +3,16 @@ package de.uos.se.designertool.logic.nodeserverlogic;
 
 import de.uos.se.xsd2gui.models.RootModel;
 import de.uos.se.xsd2gui.models.XSDModel;
-import javafx.beans.property.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 import java.io.File;
-import java.util.Observable;
 
 /**
  * Created by sem on 18.02.2016.
  */
 public class ModulflexModule
-        extends SystemElementType
+        extends ModulflexSystemElementType
 {
     private final ObjectProperty<File> _parameterFile;
     private final ObjectProperty<XSDModel> _rootModel;

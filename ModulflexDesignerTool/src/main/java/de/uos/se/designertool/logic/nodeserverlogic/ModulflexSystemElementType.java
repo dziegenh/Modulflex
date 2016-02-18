@@ -10,13 +10,13 @@ import java.util.Observable;
 /**
  * Created by sem on 18.02.2016.
  */
-public class SystemElementType
+public class ModulflexSystemElementType
         extends Observable
 {
     protected final IntegerProperty _id;
     protected final StringProperty _name;
 
-    public SystemElementType(int id, String name)
+    public ModulflexSystemElementType(int id, String name)
     {
         this._id = new SimpleIntegerProperty(id);
         this._name = new SimpleStringProperty(name);

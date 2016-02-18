@@ -1,18 +1,18 @@
 package de.uos.se.designertool.logic.nodeserverlogic;
 
 import com.sun.javafx.collections.ObservableListWrapper;
-import javafx.beans.property.*;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Observable;
 
 /**
  * Created by sem on 18.02.2016.
  */
 public class ModulflexNode
-        extends SystemElementType
+        extends ModulflexSystemElementType
 {
     private final ListProperty<ModulflexModule> _children;
 
