@@ -11,6 +11,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+        <dependency>
             <groupId>com.airhacks</groupId>
             <artifactId>afterburner.fx</artifactId>
             <version>1.6.2</version>
@@ -19,6 +24,11 @@
             <groupId>de.uos.se</groupId>
             <artifactId>xsd_gui</artifactId>
             <version>0.1a</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.moxy</artifactId>
+            <version>2.6.2</version>
         </dependency>
     </dependencies>
 
