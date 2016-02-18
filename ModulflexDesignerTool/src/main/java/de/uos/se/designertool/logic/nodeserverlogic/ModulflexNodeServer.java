@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * Created by sem on 18.02.2016.
  */
-public class ModulflexNoderServer
+public class ModulflexNodeServer
 {
     private final DoubleProperty cycleTime;
 
@@ -38,7 +38,7 @@ public class ModulflexNoderServer
      * @param children
      *         A list of children. Not required.
      */
-    private ModulflexNoderServer(double cycleTime, Boolean profiling, String logDir, String logLevel, Boolean noLog, List<ModulflexNode> children)
+    private ModulflexNodeServer(double cycleTime, Boolean profiling, String logDir, String logLevel, Boolean noLog, List<ModulflexNode> children)
     {
         this.cycleTime = new SimpleDoubleProperty(cycleTime);
 
@@ -112,6 +112,18 @@ public class ModulflexNoderServer
     }
 
     @Override
+    public int hashCode()
+    {
+        int result = cycleTime.hashCode();
+        result = 31 * result + profiling.hashCode();
+        result = 31 * result + logDir.hashCode();
+        result = 31 * result + logLevel.hashCode();
+        result = 31 * result + noLog.hashCode();
+        result = 31 * result + children.hashCode();
+        return result;
+    }
+
+    @Override
     public boolean equals(Object o)
     {
         if (this == o)
@@ -119,7 +131,7 @@ public class ModulflexNoderServer
         if (o == null || getClass() != o.getClass())
             return false;
 
-        ModulflexNoderServer that = (ModulflexNoderServer) o;
+        ModulflexNodeServer that = (ModulflexNodeServer) o;
 
         if (! cycleTime.equals(that.cycleTime))
             return false;
@@ -136,21 +148,9 @@ public class ModulflexNoderServer
     }
 
     @Override
-    public int hashCode()
-    {
-        int result = cycleTime.hashCode();
-        result = 31 * result + profiling.hashCode();
-        result = 31 * result + logDir.hashCode();
-        result = 31 * result + logLevel.hashCode();
-        result = 31 * result + noLog.hashCode();
-        result = 31 * result + children.hashCode();
-        return result;
-    }
-
-    @Override
     public String toString()
     {
-        return "ModulflexNoderServer{" +
+        return "ModulflexNodeServer{" +
                 "cycleTime=" + cycleTime +
                 ", profiling=" + profiling +
                 ", logDir=" + logDir +
