@@ -2,9 +2,9 @@ package de.uos.se.designertool.gui.app;
 
 import de.uos.se.designertool.gui.systemtree.SystemtreePresenter;
 import de.uos.se.designertool.gui.systemtree.SystemtreeView;
-import de.uos.se.designertool.logic.ITreeListener;
+import de.uos.se.designertool.logic.IModuleListener;
+import de.uos.se.designertool.logic.LogicModule;
 import de.uos.se.designertool.logic.ModulflexDesignerLogic;
-import de.uos.se.designertool.logic.TreeLogic;
 import de.uos.se.designertool.logic.nodeserverlogic.ModulflexModule;
 import de.uos.se.designertool.logic.nodeserverlogic.ModulflexNode;
 import de.uos.se.designertool.logic.nodeserverlogic.ModulflexNodeServer;
@@ -45,35 +45,27 @@ public class AppPresenter
         implements Initializable
 {
 
-    private String XSD_BASE_DIR;
-
     @Inject
     ModulflexDesignerLogic logic;
     @FXML
     AnchorPane leftContent;
-
     @FXML
     ScrollPane rightPane;
-
     SystemtreeView systemTreeView;
-
     ObjectProperty<ModulflexNodeServer> ns;
-
     ListProperty<ModulflexNode> elems;
-
     ObjectProperty<Map<XSDModel, Pane>> models;
-
     WidgetFactory widgetFactory;
     ObjectProperty<ModulflexModule> currentSelected;
-    private DocumentBuilder _documentBuilder;
-
     @Inject
-    TreeLogic treeLogic;
+    LogicModule<ModulflexSystemElementType> logicModule;
+    private String XSD_BASE_DIR;
+    private DocumentBuilder _documentBuilder;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        URL configDir = AppPresenter.class.getClassLoader().getResource("config");
+        URL configDir = Thread.currentThread().getContextClassLoader().getResource("config");
         // todo check dir existance :)
         this.XSD_BASE_DIR = configDir.getFile() + File.separator;
 
@@ -114,10 +106,11 @@ public class AppPresenter
 //            rightPane.contentProperty().setValue(models.get().get(observable1.getValue().rootModelProperty().get()));
 //        });
 
-        treeLogic.addListener(new ITreeListener()
+        logicModule.addListener(new IModuleListener<ModulflexSystemElementType>()
         {
+
             @Override
-            public void selectionChanged(ModulflexSystemElementType element)
+            public void eventFired(ModulflexSystemElementType element)
             {
                 if (element instanceof ModulflexModule)
                 {

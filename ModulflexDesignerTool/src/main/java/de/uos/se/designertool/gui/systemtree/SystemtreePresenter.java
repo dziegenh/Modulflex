@@ -1,6 +1,6 @@
 package de.uos.se.designertool.gui.systemtree;
 
-import de.uos.se.designertool.logic.TreeLogic;
+import de.uos.se.designertool.logic.LogicModule;
 import de.uos.se.designertool.logic.nodeserverlogic.ModulflexModule;
 import de.uos.se.designertool.logic.nodeserverlogic.ModulflexNode;
 import de.uos.se.designertool.logic.nodeserverlogic.ModulflexNodeServer;
@@ -16,9 +16,9 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
 
+import javax.inject.Inject;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javax.inject.Inject;
 
 /**
  * @author dziegenhagen
@@ -39,7 +39,7 @@ public class SystemtreePresenter
     ObjectProperty<ModulflexModule> current;
 
     @Inject
-    TreeLogic treeLogic;
+    LogicModule<ModulflexSystemElementType> logicModule;
     
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -71,8 +71,8 @@ public class SystemtreePresenter
         treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             ModulflexSystemElementType value = newValue.getValue();
             System.out.println(value);
-            
-            treeLogic.changeElement(value);
+
+            logicModule.fireEvent(value);
             
             
 //            if (value instanceof ModulflexModule)
