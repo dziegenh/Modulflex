@@ -2,8 +2,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uos.se.designertool.gui.app.AppPresenter">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/8.0.40" fx:controller="de.uos.se.designertool.gui.app.AppPresenter">
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -29,7 +29,7 @@
             <SplitPane dividerPositions="0.29797979797979796">
               <items>
                 <AnchorPane fx:id="leftContent" minHeight="0.0" minWidth="0.0" />
-                <AnchorPane fx:id="rightContent" minHeight="0.0" minWidth="0.0" />
+                  <ScrollPane fx:id="rightPane" minHeight="0.0" minWidth="0.0"/>
               </items>
             </SplitPane>
          </children>
