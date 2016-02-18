@@ -111,4 +111,55 @@ public class NodeServer
     {
         return children;
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        NodeServer that = (NodeServer) o;
+
+        if (! cycleTime.equals(that.cycleTime))
+            return false;
+        if (! profiling.equals(that.profiling))
+            return false;
+        if (! logDir.equals(that.logDir))
+            return false;
+        if (! logLevel.equals(that.logLevel))
+            return false;
+        if (! noLog.equals(that.noLog))
+            return false;
+        return children.equals(that.children);
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = cycleTime.hashCode();
+        result = 31 * result + profiling.hashCode();
+        result = 31 * result + logDir.hashCode();
+        result = 31 * result + logLevel.hashCode();
+        result = 31 * result + noLog.hashCode();
+        result = 31 * result + children.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "NodeServer{" +
+                "cycleTime=" + cycleTime +
+                ", profiling=" + profiling +
+                ", logDir=" + logDir +
+                ", logLevel=" + logLevel +
+                ", noLog=" + noLog +
+                ", children=" + children +
+                '}';
+    }
+
+
 }
