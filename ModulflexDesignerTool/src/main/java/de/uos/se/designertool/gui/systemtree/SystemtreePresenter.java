@@ -1,6 +1,5 @@
 package de.uos.se.designertool.gui.systemtree;
 
-import de.uos.se.designertool.logic.DummyLogic;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -28,7 +27,7 @@ public class SystemtreePresenter
     TreeView treeView;
 
     @Inject
-    DummyLogic someLogic;
+//    DummyLogic someLogic;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -53,7 +52,7 @@ public class SystemtreePresenter
             {
                 Logger.getLogger(SystemtreePresenter.class.getName())
                       .log(Level.INFO, "Tree selection changed: {0}", newValue);
-                someLogic.doSomething();
+//                someLogic.doSomething();
             }
 
         });
