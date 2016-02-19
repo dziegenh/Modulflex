@@ -121,6 +121,9 @@ public class ModulflexNodeServer
         this(.0);
     }
 
+    /**
+     * For JAXB purposes only
+     */
     @XmlPath ("configuration/@cycleTime")
     private double getCycleTime()
     {
@@ -132,11 +135,17 @@ public class ModulflexNodeServer
         return cycleTime;
     }
 
+    /**
+     * For JAXB purposes only
+     */
     private void setCycleTime(double cycleTime)
     {
         this.cycleTime.set(cycleTime);
     }
 
+    /**
+     * For JAXB purposes only
+     */
     @XmlPath ("configuration/@profiling")
     private Boolean getProfiling()
     {
@@ -148,11 +157,17 @@ public class ModulflexNodeServer
         return profiling;
     }
 
+    /**
+     * For JAXB purposes only
+     */
     private void setProfiling(Boolean profiling)
     {
         this.profiling.set(profiling);
     }
 
+    /**
+     * For JAXB purposes only
+     */
     @XmlPath ("configuration/@logDir")
     private String getLogDir()
     {
@@ -164,11 +179,17 @@ public class ModulflexNodeServer
         return logDir;
     }
 
+    /**
+     * For JAXB purposes only
+     */
     private void setLogDir(String logDir)
     {
         this.logDir.set(logDir);
     }
 
+    /**
+     * For JAXB purposes only
+     */
     @XmlPath ("configuration/@logLevel")
     private String getLogLevel()
     {
@@ -180,11 +201,17 @@ public class ModulflexNodeServer
         return logLevel;
     }
 
+    /**
+     * For JAXB purposes only
+     */
     private void setLogLevel(String logLevel)
     {
         this.logLevel.set(logLevel);
     }
 
+    /**
+     * For JAXB purposes only
+     */
     @XmlPath ("configuration/@noLog")
     private Boolean getNoLog()
     {
@@ -196,11 +223,17 @@ public class ModulflexNodeServer
         return noLog;
     }
 
+    /**
+     * For JAXB purposes only
+     */
     private void setNoLog(Boolean noLog)
     {
         this.noLog.set(noLog);
     }
 
+    /**
+     * For JAXB purposes only
+     */
     @XmlElementWrapper (name = "children")
     @XmlElement (name = "node")
     private ObservableList<ModulflexNode> getChildren()
@@ -213,11 +246,17 @@ public class ModulflexNodeServer
         return children;
     }
 
+    /**
+     * For JAXB purposes only
+     */
     private void setChildren(ObservableList<ModulflexNode> children)
     {
         this.children.set(children);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {
@@ -226,10 +265,20 @@ public class ModulflexNodeServer
         result = 31 * result + Objects.hashCode(logDir.getValue());
         result = 31 * result + Objects.hashCode(logLevel.getValue());
         result = 31 * result + Objects.hashCode(noLog.getValue());
+        // TODO: incorporate this when it's part of equals()
         //   result = 31 * result + children.hashCode();
         return result;
     }
 
+    /**
+     * Two instances are equals if they fulfil what is defined in {@linkplain Object#equals(Object)} and their {@linkplain #getClass()}
+     * yield the same. And all their attributes are the same, e.g. cycle time (same value), log dir (either both not set or same).
+     *
+     * @param o
+     *         The instance to test for equality.
+     *
+     * @return true as described above, false otherwise.
+     */
     @Override
     public boolean equals(Object o)
     {
@@ -268,6 +317,9 @@ public class ModulflexNodeServer
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString()
     {
