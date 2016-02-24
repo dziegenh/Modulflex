@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
  * <p>
  * Tests some important implementation details of {@linkplain ModulflexNodeServer}.
  */
+@SuppressWarnings ("unused")
 public class ModulflexNodeServerTest
 {
     //top down
@@ -55,6 +56,7 @@ public class ModulflexNodeServerTest
         NODE_SERVER = new ModulflexNodeServer(5, false, null, null, null, nodes);
     }
 
+    @SuppressWarnings ("EqualsWithItself")
     @Test
     public void testEquals()
     {
@@ -90,9 +92,9 @@ public class ModulflexNodeServerTest
         modules2.add(pwm2);
         modules2.add(digitalIO2);
 
-        final ModulflexNode simpleSlave2 = new ModulflexNode(0, "simpleSlave", modules);
+        final ModulflexNode simpleSlave2 = new ModulflexNode(0, "simpleSlave", modules2);
         List<ModulflexNode> nodes2 = new ArrayList<>(1);
-        nodes2.add(simpleSlave);
+        nodes2.add(simpleSlave2);
 
         final ModulflexNodeServer modulflexNodeServer2 = new ModulflexNodeServer(5, false, null, null, null, nodes2);
 
@@ -102,6 +104,7 @@ public class ModulflexNodeServerTest
         assertTrue(NODE_SERVER.equals(modulflexNodeServer1) && modulflexNodeServer1
                 .equals(modulflexNodeServer2) && NODE_SERVER.equals(modulflexNodeServer2));
         assertTrue(NODE_SERVER.equals(NODE_SERVER));
+        //noinspection ObjectEqualsNull
         assertFalse(modulflexNodeServer1.equals(null));
         assertFalse(modulflexNodeServer3.equals(new Object()));
         assertFalse(modulflexNodeServer1.equals(modulflexNodeServer3));
