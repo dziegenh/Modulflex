@@ -4,17 +4,23 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.io.File;
 
 /**
- * Created by sem on 18.02.2016.
+ * An adapter class to marshal and unmarshal objects into JAXB and back.
  */
 public class FileAdapter
         extends XmlAdapter<String, File>
 {
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public File unmarshal(String v) throws Exception
     {
         return new File(v);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String marshal(File v) throws Exception
     {

@@ -9,8 +9,11 @@ import java.util.Observable;
 
 /**
  * Created by sem on 18.02.2016.
+ * <p>
+ * This class describes a Modulflex system element. This may be everything but the 1st level (the node server), e.g. a node or a module.
  */
-public class ModulflexSystemElementType
+@SuppressWarnings ("unused")
+public abstract class ModulflexSystemElementType
         extends Observable
 {
     protected final IntegerProperty _id;
@@ -37,5 +40,4 @@ public class ModulflexSystemElementType
     {
         return this._id;
     }
-
 }

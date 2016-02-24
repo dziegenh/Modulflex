@@ -9,10 +9,14 @@ import javafx.beans.property.SimpleObjectProperty;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.File;
+import java.util.Objects;
 
 /**
  * Created by sem on 18.02.2016.
+ *
+ * Describes a module which is the 3rd tier.
  */
+@SuppressWarnings ("unused")
 public class ModulflexModule
         extends ModulflexSystemElementType
 {
@@ -82,9 +86,42 @@ public class ModulflexModule
         this._parameterFile.setValue(file);
     }
 
+    private XSDModel get_rootModel()
+    {
+        return this._rootModel.get();
+    }
+
     @Override
     public String toString()
     {
         return _name.get() + _id.get();
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        ModulflexModule that = (ModulflexModule) o;
+
+        if (get_id() != that.get_id())
+            return false;
+        if (! get_name().equals(that.get_name()))
+        {
+            return false;
+        }
+        // TODO: incorporate rootmodel
+        return get_parameterFile().equals(that.get_parameterFile());
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        // TODO: include the root model
+        return Objects.hash(this.get_id(), this.get_name(), this.get_parameterFile());
     }
 }

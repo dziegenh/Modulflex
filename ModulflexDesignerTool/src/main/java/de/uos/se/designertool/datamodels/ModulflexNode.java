@@ -11,11 +11,15 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by sem on 18.02.2016.
+ * <p>
+ * This class encapsulates a node which is the 2nd tier.
  */
 
+@SuppressWarnings ("unused")
 public class ModulflexNode
         extends ModulflexSystemElementType
 {
@@ -78,4 +82,30 @@ public class ModulflexNode
         return _name.get() + _id.get();
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        ModulflexNode that = (ModulflexNode) o;
+
+        if (get_id() != that.get_id())
+            return false;
+        //noinspection SimplifiableIfStatement
+        if (! get_name().equals(that.get_name()))
+        {
+            return false;
+        }
+
+        return this.getChildren().equals(that.getChildren());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(this.get_id(), this.get_name(), this.getChildren());
+    }
 }

@@ -17,7 +17,7 @@ import java.util.Objects;
  * <p>
  * This class represents a node server. This is the top-level element in a topology.
  * For convenience all values are handled by Properties (See {@linkplain Property}). This also means values can be changed after creation.
- * The getter and setter methods are private since they need to be exclusively accessed by JAXB.
+ * The getter and setter methods are private since they're accessed by JAXB exclusively.
  */
 @SuppressWarnings ("unused")
 @XmlRootElement (name = "Nodeserver")
@@ -260,14 +260,8 @@ public class ModulflexNodeServer
     @Override
     public int hashCode()
     {
-        int result = cycleTime.getValue().hashCode();
-        result = 31 * result + Objects.hashCode(profiling.getValue());
-        result = 31 * result + Objects.hashCode(logDir.getValue());
-        result = 31 * result + Objects.hashCode(logLevel.getValue());
-        result = 31 * result + Objects.hashCode(noLog.getValue());
-        // TODO: incorporate this when it's part of equals()
-        //   result = 31 * result + children.hashCode();
-        return result;
+        return Objects.hash(cycleTime.getValue(), profiling.getValue(), logDir.getValue(), logLevel.getValue(),
+                            noLog.getValue(), children.getValue());
     }
 
     /**
@@ -311,9 +305,7 @@ public class ModulflexNodeServer
         {
             return false;
         }
-        // TODO: Incorporate children, they must implement equals() therefore
-        //return this.getChildren().equals(that.getChildren());
-        return true;
+        return this.getChildren().equals(that.getChildren());
 
     }
 
