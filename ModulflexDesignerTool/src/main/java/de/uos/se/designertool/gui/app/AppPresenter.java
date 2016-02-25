@@ -117,7 +117,6 @@ public class AppPresenter
             } else if (element instanceof ModulflexNode)
             {
                 Pane v = nodeModels.get((ModulflexNode) element);
-                System.out.println(v);
                 rightPane.contentProperty().setValue(v);
             }
         });
