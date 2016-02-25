@@ -4,6 +4,8 @@ import de.uos.se.designertool.datamodels.ModulflexModule;
 import de.uos.se.designertool.datamodels.ModulflexNode;
 import de.uos.se.designertool.datamodels.ModulflexNodeServer;
 import de.uos.se.designertool.datamodels.ModulflexSystemElementType;
+import de.uos.se.designertool.logic.ComponentAddedModule;
+import de.uos.se.designertool.logic.NodeAddedModule;
 import de.uos.se.designertool.logic.NodeServerAddedModule;
 import de.uos.se.designertool.logic.SystemElementTypeChangedModule;
 import javafx.beans.property.ListProperty;
@@ -33,7 +35,7 @@ public class SystemtreePresenter
 
     TreeView<ModulflexSystemElementType> treeView;
 
-    ObjectProperty<ModulflexNodeServer> ns;
+    ModulflexNodeServer ns;
 
     ListProperty<ModulflexNode> children;
 
@@ -43,25 +45,24 @@ public class SystemtreePresenter
     SystemElementTypeChangedModule logicModule;
 
     @Inject
-    NodeServerAddedModule naModule;
+    NodeServerAddedModule nodeServerAddedModule;
+    @Inject
+    NodeAddedModule nodeAddedModule;
+
+    @Inject
+    ComponentAddedModule componentAddedModule;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-
-        // dummy entries
-        ns = new SimpleObjectProperty<>();
         children = new SimpleListProperty<>();
         current = new SimpleObjectProperty<>();
         TreeItem<ModulflexSystemElementType> rootItem = new TreeItem<>();
         rootItem.setExpanded(true);
-        ns.addListener((observable1, oldValue1, newValue1) -> {
-            load(newValue1);
-        });
         treeView = new TreeView<>(rootItem);
-        children.addListener((observable, oldValue, newValue) -> {
+        nodeAddedModule.addListener((data) -> {
             rootItem.getChildren().clear();
-            for (ModulflexNode node : newValue)
+            for (ModulflexNode node : ns.childrenProperty())
             {
                 TreeItem<ModulflexSystemElementType> nested = new TreeItem<>(node);
                 rootItem.getChildren().add(nested);
@@ -71,36 +72,15 @@ public class SystemtreePresenter
                 }
             }
         });
-        naModule.addListener(data -> ns.setValue(data) );
+        nodeServerAddedModule.addListener(data -> ns = data);
         treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             ModulflexSystemElementType value = newValue.getValue();
             System.out.println(value);
-
             logicModule.fireEvent(value);
-            
-            
-//            if (value instanceof ModulflexModule)
-//                current.setValue((ModulflexModule) value);
         });
 
 
         treeView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         rootPane.getChildren().add(treeView);
-    }
-
-    private void load(ModulflexNodeServer newValue)
-    {
-        children.unbind();
-        children.bindBidirectional(newValue.childrenProperty());
-    }
-
-    public ObjectProperty<ModulflexNodeServer> nodeServerProperty()
-    {
-        return ns;
-    }
-
-    public ObjectProperty<ModulflexModule> currentProperty()
-    {
-        return current;
     }
 }

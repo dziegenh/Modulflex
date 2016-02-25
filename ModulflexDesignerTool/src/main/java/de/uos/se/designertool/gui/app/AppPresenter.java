@@ -1,18 +1,19 @@
 package de.uos.se.designertool.gui.app;
 
+import com.sun.javafx.collections.ObservableListWrapper;
 import de.uos.se.designertool.datamodels.ModulflexModule;
 import de.uos.se.designertool.datamodels.ModulflexNode;
 import de.uos.se.designertool.datamodels.ModulflexNodeServer;
-import de.uos.se.designertool.datamodels.ModulflexSystemElementType;
 import de.uos.se.designertool.gui.systemtree.SystemtreeView;
-import de.uos.se.designertool.logic.ILogicModuleListener;
-import de.uos.se.designertool.logic.ModulflexDesignerLogic;
+import de.uos.se.designertool.logic.ComponentAddedModule;
+import de.uos.se.designertool.logic.NodeAddedModule;
 import de.uos.se.designertool.logic.NodeServerAddedModule;
 import de.uos.se.designertool.logic.SystemElementTypeChangedModule;
 import de.uos.se.xsd2gui.generators.*;
 import de.uos.se.xsd2gui.models.RootModel;
 import de.uos.se.xsd2gui.models.XSDModel;
-import de.uos.se.xsd2gui.xsdparser.WidgetFactory;
+import de.uos.se.xsd2gui.xsdparser.AbstractWidgetFactory;
+import de.uos.se.xsd2gui.xsdparser.DefaultWidgetFactory;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -33,6 +34,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -46,25 +48,26 @@ public class AppPresenter
         implements Initializable
 {
 
-    @Inject
-    ModulflexDesignerLogic logic;
     @FXML
     AnchorPane leftContent;
     @FXML
     ScrollPane rightPane;
     SystemtreeView systemTreeView;
-    ObjectProperty<ModulflexNodeServer> ns;
+    ModulflexNodeServer ns;
     ListProperty<ModulflexNode> elems;
     ObjectProperty<Map<XSDModel, Pane>> models;
-    WidgetFactory widgetFactory;
+    AbstractWidgetFactory widgetFactory;
     ObjectProperty<ModulflexModule> currentSelected;
     @Inject
     SystemElementTypeChangedModule logicModule;
+    @Inject
+    NodeServerAddedModule nodeServerAddedModule;
+    @Inject
+    NodeAddedModule nodeAddedModule;
+    @Inject
+    ComponentAddedModule componentAddedModule;
     private String XSD_BASE_DIR;
     private DocumentBuilder documentBuilder;
-
-    @Inject
-    NodeServerAddedModule naModule;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -79,9 +82,9 @@ public class AppPresenter
         {
             throw new RuntimeException(e);
         }
-
+        nodeServerAddedModule.addListener(data -> ns = data);
         models = new SimpleObjectProperty<>(new HashMap<>());
-        widgetFactory = new WidgetFactory();
+        widgetFactory = new DefaultWidgetFactory();
         widgetFactory.addWidgetGenerator(new BasicAttributeParser());
         widgetFactory.addWidgetGenerator(new SimpleTypeParser());
         widgetFactory.addWidgetGenerator(new ContainerParser());
@@ -107,8 +110,7 @@ public class AppPresenter
         systemTreeView = new SystemtreeView();
 
         currentSelected = new SimpleObjectProperty<>();
-        ns = new SimpleObjectProperty<>();
-        elems = new SimpleListProperty<>();
+        elems = new SimpleListProperty<>(new ObservableListWrapper<>(new LinkedList<>()));
         //
         //        currentSelected.addListener((observable1, oldValue1, newValue1) -> {
         //            System.out.println(observable1);
@@ -116,39 +118,21 @@ public class AppPresenter
         // ().rootModelProperty().get()));
         //        });
 
-        logicModule.addListener(new ILogicModuleListener<ModulflexSystemElementType>()
-        {
-
-            @Override
-            public void eventFired(ModulflexSystemElementType element)
+        logicModule.addListener(element -> {
+            if (element instanceof ModulflexModule)
             {
-                if (element instanceof ModulflexModule)
-                {
-                    rightPane.contentProperty().setValue(models.get()
-                                                               .get(((ModulflexModule) element)
-                                                                            .rootModelProperty()
-                                                                            .getValue()));
-                }
+                rightPane.contentProperty()
+                         .setValue(models.get().get(((ModulflexModule) element).rootModelProperty().getValue()));
             }
-
         });
 
 
         leftContent.getChildren().add(systemTreeView.getView());
-        logic.nodeServerProperty().bindBidirectional(ns);
-        ns.addListener((observable, oldValue, newValue) -> load(newValue));
         ModulflexNodeServer server = new ModulflexNodeServer();
-        naModule.fireEvent(server);
-        load(server);
-        ns.setValue(server);
+        nodeServerAddedModule.fireEvent(server);
         addDummys();
     }
 
-    private void load(ModulflexNodeServer newValue)
-    {
-        elems.unbind();
-        elems.bindBidirectional(newValue.childrenProperty());
-    }
 
     private void addDummys()
     {
@@ -172,15 +156,18 @@ public class AppPresenter
                                                              filename.replaceAll(
                                                                      "\\" + File.separator, "/"));
                     dummyModels.put(model, currentContent);
-                    myNode.modulesProperty().add(new ModulflexModule(i, "testname", new File(
-                            "." + File.separator + "testname" + i + "xsd"), model));
+                    ModulflexModule module = new ModulflexModule(i, "testname", new File(
+                            "." + File.separator + "testname" + i + "xsd"), model);
+                    myNode.modulesProperty().add(module);
+                    componentAddedModule.fireEvent(module);
                 }
                 catch (Exception ex)
                 {
                     Logger.getLogger(AppPresenter.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            elems.add(myNode);
+            ns.childrenProperty().add(myNode);
+            nodeAddedModule.fireEvent(myNode);
         }
         models.setValue(dummyModels);
 
