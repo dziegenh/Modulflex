@@ -4,12 +4,13 @@ import de.uos.se.designertool.datamodels.ModulflexModule;
 import de.uos.se.designertool.datamodels.ModulflexNode;
 import de.uos.se.designertool.datamodels.ModulflexNodeServer;
 import de.uos.se.designertool.datamodels.ModulflexSystemElementType;
+import de.uos.se.designertool.gui.create_dialog.newNSView;
 import de.uos.se.designertool.gui.systemtree.SystemtreeView;
 import de.uos.se.designertool.logic.ComponentAddedModule;
 import de.uos.se.designertool.logic.NodeChangedModule;
 import de.uos.se.designertool.logic.NodeServerAddedModule;
 import de.uos.se.designertool.logic.SystemElementTypeChangedModule;
-import de.uos.se.xsd2gui.generators.*;
+import de.uos.se.xsd2gui.model_generators.*;
 import de.uos.se.xsd2gui.models.RootModel;
 import de.uos.se.xsd2gui.models.XSDModel;
 import de.uos.se.xsd2gui.xsdparser.AbstractWidgetFactory;
@@ -64,6 +65,7 @@ public class AppPresenter
     ComponentAddedModule componentAddedModule;
     private String XSD_BASE_DIR;
     private DocumentBuilder documentBuilder;
+    private newNSView newNSView;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -81,6 +83,7 @@ public class AppPresenter
             ns = data;
             models.clear();
             nodeModels.clear();
+            newNSView = new newNSView();
         });
         models = new HashMap<>();
         nodeModels = new HashMap<>();
@@ -112,7 +115,6 @@ public class AppPresenter
         //            rightPane.contentProperty().setValue(models.get().get(observable1.getValue
         // ().rootModelProperty().get()));
         //        });
-
         logicModule.addListener(element -> {
             if (element instanceof ModulflexModule)
             {
@@ -122,12 +124,16 @@ public class AppPresenter
             {
                 Pane v = nodeModels.get((ModulflexNode) element);
                 rightPane.contentProperty().setValue(v);
+            } else if (element instanceof ModulflexNodeServer)
+            {
+                rightPane.contentProperty().setValue(newNSView.getView());
             }
         });
         nodeChangedModule.addListener(data -> nodeModels.put(data, new VBox(10, new Label(data.toString()))));
 
         leftContent.getChildren().add(systemTreeView.getView());
         ModulflexNodeServer server = new ModulflexNodeServer();
+
         nodeServerAddedModule.fireEvent(server);
         //addDummys();
     }

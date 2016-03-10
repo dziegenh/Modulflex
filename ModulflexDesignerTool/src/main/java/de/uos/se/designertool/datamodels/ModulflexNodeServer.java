@@ -22,6 +22,7 @@ import java.util.Objects;
 @SuppressWarnings ("unused")
 @XmlRootElement (name = "Nodeserver")
 public class ModulflexNodeServer
+        extends ModulflexSystemElementType
 {
     private final DoubleProperty cycleTime;
 
@@ -34,6 +35,26 @@ public class ModulflexNodeServer
     private final ObjectProperty<Boolean> noLog;
 
     private final ListProperty<ModulflexNode> children;
+
+    /**
+     * For JAXB purposes only
+     */
+    public ModulflexNodeServer()
+    {
+        this(.0);
+    }
+
+    /**
+     * Convenience constructor that only needs arguments that are required for a node server.
+     *
+     * @param cycleTime
+     *         The cycle time for the node server.
+     */
+    @SuppressWarnings ("WeakerAccess")
+    public ModulflexNodeServer(@SuppressWarnings ("SameParameterValue") double cycleTime)
+    {
+        this(cycleTime, null, null, null, null, null);
+    }
 
     /**
      * Creates a new node server. The parameters are mostly not primitive to allow <code>null</code>-values in case of the absence of non-required values.
@@ -101,55 +122,9 @@ public class ModulflexNodeServer
         }
     }
 
-    /**
-     * Convenience constructor that only needs arguments that are required for a node server.
-     *
-     * @param cycleTime
-     *         The cycle time for the node server.
-     */
-    @SuppressWarnings ("WeakerAccess")
-    public ModulflexNodeServer(@SuppressWarnings ("SameParameterValue") double cycleTime)
-    {
-        this(cycleTime, null, null, null, null, null);
-    }
-
-    /**
-     * For JAXB purposes only
-     */
-    public ModulflexNodeServer()
-    {
-        this(.0);
-    }
-
-    /**
-     * For JAXB purposes only
-     */
-    @XmlPath ("configuration/@cycleTime")
-    private double getCycleTime()
-    {
-        return cycleTime.get();
-    }
-
     public DoubleProperty cycleTimeProperty()
     {
         return cycleTime;
-    }
-
-    /**
-     * For JAXB purposes only
-     */
-    private void setCycleTime(double cycleTime)
-    {
-        this.cycleTime.set(cycleTime);
-    }
-
-    /**
-     * For JAXB purposes only
-     */
-    @XmlPath ("configuration/@profiling")
-    private Boolean getProfiling()
-    {
-        return profiling.get();
     }
 
     public ObjectProperty<Boolean> profilingProperty()
@@ -157,43 +132,9 @@ public class ModulflexNodeServer
         return profiling;
     }
 
-    /**
-     * For JAXB purposes only
-     */
-    private void setProfiling(Boolean profiling)
-    {
-        this.profiling.set(profiling);
-    }
-
-    /**
-     * For JAXB purposes only
-     */
-    @XmlPath ("configuration/@logDir")
-    private String getLogDir()
-    {
-        return logDir.get();
-    }
-
     public StringProperty logDirProperty()
     {
         return logDir;
-    }
-
-    /**
-     * For JAXB purposes only
-     */
-    private void setLogDir(String logDir)
-    {
-        this.logDir.set(logDir);
-    }
-
-    /**
-     * For JAXB purposes only
-     */
-    @XmlPath ("configuration/@logLevel")
-    private String getLogLevel()
-    {
-        return logLevel.get();
     }
 
     public StringProperty logLevelProperty()
@@ -201,57 +142,14 @@ public class ModulflexNodeServer
         return logLevel;
     }
 
-    /**
-     * For JAXB purposes only
-     */
-    private void setLogLevel(String logLevel)
-    {
-        this.logLevel.set(logLevel);
-    }
-
-    /**
-     * For JAXB purposes only
-     */
-    @XmlPath ("configuration/@noLog")
-    private Boolean getNoLog()
-    {
-        return noLog.get();
-    }
-
     public ObjectProperty<Boolean> noLogProperty()
     {
         return noLog;
     }
 
-    /**
-     * For JAXB purposes only
-     */
-    private void setNoLog(Boolean noLog)
-    {
-        this.noLog.set(noLog);
-    }
-
-    /**
-     * For JAXB purposes only
-     */
-    @XmlElementWrapper (name = "children")
-    @XmlElement (name = "node")
-    private ObservableList<ModulflexNode> getChildren()
-    {
-        return children.get();
-    }
-
     public ListProperty<ModulflexNode> childrenProperty()
     {
         return children;
-    }
-
-    /**
-     * For JAXB purposes only
-     */
-    private void setChildren(ObservableList<ModulflexNode> children)
-    {
-        this.children.set(children);
     }
 
     /**
@@ -307,6 +205,109 @@ public class ModulflexNodeServer
         }
         return this.getChildren().equals(that.getChildren());
 
+    }
+
+    /**
+     * For JAXB purposes only
+     */
+    @XmlPath ("configuration/@cycleTime")
+    private double getCycleTime()
+    {
+        return cycleTime.get();
+    }
+
+    /**
+     * For JAXB purposes only
+     */
+    private void setCycleTime(double cycleTime)
+    {
+        this.cycleTime.set(cycleTime);
+    }
+
+    /**
+     * For JAXB purposes only
+     */
+    @XmlPath ("configuration/@noLog")
+    private Boolean getNoLog()
+    {
+        return noLog.get();
+    }
+
+    /**
+     * For JAXB purposes only
+     */
+    @XmlPath ("configuration/@profiling")
+    private Boolean getProfiling()
+    {
+        return profiling.get();
+    }
+
+    /**
+     * For JAXB purposes only
+     */
+    private void setProfiling(Boolean profiling)
+    {
+        this.profiling.set(profiling);
+    }
+
+    /**
+     * For JAXB purposes only
+     */
+    @XmlPath ("configuration/@logDir")
+    private String getLogDir()
+    {
+        return logDir.get();
+    }
+
+    /**
+     * For JAXB purposes only
+     */
+    private void setLogDir(String logDir)
+    {
+        this.logDir.set(logDir);
+    }
+
+    /**
+     * For JAXB purposes only
+     */
+    @XmlPath ("configuration/@logLevel")
+    private String getLogLevel()
+    {
+        return logLevel.get();
+    }
+
+    /**
+     * For JAXB purposes only
+     */
+    private void setLogLevel(String logLevel)
+    {
+        this.logLevel.set(logLevel);
+    }
+
+    /**
+     * For JAXB purposes only
+     */
+    @XmlElementWrapper (name = "children")
+    @XmlElement (name = "node")
+    private ObservableList<ModulflexNode> getChildren()
+    {
+        return children.get();
+    }
+
+    /**
+     * For JAXB purposes only
+     */
+    private void setChildren(ObservableList<ModulflexNode> children)
+    {
+        this.children.set(children);
+    }
+
+    /**
+     * For JAXB purposes only
+     */
+    private void setNoLog(Boolean noLog)
+    {
+        this.noLog.set(noLog);
     }
 
     /**
