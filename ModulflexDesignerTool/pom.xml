@@ -24,7 +24,7 @@
         <dependency>
             <groupId>de.uos.se</groupId>
             <artifactId>xsd_gui</artifactId>
-            <version>0.2a</version>
+            <version>0.3a</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
