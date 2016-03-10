@@ -53,11 +53,11 @@ public class NewnsPresenter
         nodeServerAddedModule.addListener(data -> {
             nodeServer = data;
             cycleTime.textProperty().bindBidirectional(data.cycleTimeProperty(), new NumberStringConverter());
-            data.nameProperty().bindBidirectional(nameField.textProperty());
-            data.profilingProperty().bindBidirectional(profilingBox.selectedProperty());
-            data.logDirProperty().bindBidirectional(logDir.textProperty());
-            data.logLevelProperty().bindBidirectional(logLevel.textProperty());
-            data.noLogProperty().bindBidirectional(noLog.selectedProperty());
+            nameField.textProperty().bindBidirectional(data.nameProperty());
+            profilingBox.selectedProperty().bindBidirectional(nodeServer.profilingProperty());
+            logDir.textProperty().bindBidirectional(nodeServer.logDirProperty());
+            logLevel.textProperty().bindBidirectional(nodeServer.logLevelProperty());
+            noLog.selectedProperty().bindBidirectional(nodeServer.noLogProperty());
             data.nameProperty().addListener((observable, oldValue, newValue) -> elementChangedModule.fireEvent(data));
         });
     }
