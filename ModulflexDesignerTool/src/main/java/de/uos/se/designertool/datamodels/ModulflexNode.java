@@ -72,56 +72,12 @@ public class ModulflexNode
     }
 
     /**
-     * For JAXB purposes only.
-     */
-    @XmlElementWrapper (name = "children")
-    @XmlElement (name = "module")
-    private ObservableList<ModulflexModule> getChildren()
-    {
-        return this._children.getValue();
-    }
-
-    /**
-     * For JAXB purposes only.
-     */
-    @XmlAttribute (name = "id")
-    private int get_id()
-    {
-        return _id.get();
-    }
-
-    /**
-     * For JAXB purposes only.
-     */
-    private void set_id(int _id)
-    {
-        this._id.set(_id);
-    }
-
-    /**
-     * For JAXB purposes only.
-     */
-    @XmlAttribute (name = "name")
-    private String get_name()
-    {
-        return _name.get();
-    }
-
-    /**
-     * For JAXB purposes only.
-     */
-    private void set_name(String _name)
-    {
-        this._name.set(_name);
-    }
-
-    /**
-     * @return A {@linkplain String} containing the name and ID of the node.
+     * {@inheritDoc}
      */
     @Override
-    public String toString()
+    public int hashCode()
     {
-        return _name.get() + _id.get();
+        return Objects.hash(this.get_id(), this.get_name(), this.getChildren());
     }
 
     /**
@@ -155,11 +111,55 @@ public class ModulflexNode
     }
 
     /**
-     * {@inheritDoc}
+     * For JAXB purposes only.
+     */
+    @XmlAttribute (name = "id")
+    private int get_id()
+    {
+        return _id.get();
+    }
+
+    /**
+     * For JAXB purposes only.
+     */
+    private void set_id(int _id)
+    {
+        this._id.set(_id);
+    }
+
+    /**
+     * For JAXB purposes only.
+     */
+    @XmlAttribute (name = "name")
+    private String get_name()
+    {
+        return _name.get();
+    }
+
+    /**
+     * For JAXB purposes only.
+     */
+    @XmlElementWrapper (name = "children")
+    @XmlElement (name = "module")
+    private ObservableList<ModulflexModule> getChildren()
+    {
+        return this._children.getValue();
+    }
+
+    /**
+     * For JAXB purposes only.
+     */
+    private void set_name(String _name)
+    {
+        this._name.set(_name);
+    }
+
+    /**
+     * @return A {@linkplain String} containing the name and ID of the node.
      */
     @Override
-    public int hashCode()
+    public String toString()
     {
-        return Objects.hash(this.get_id(), this.get_name(), this.getChildren());
+        return _name.get() + " [ID:" + _id.get() + "]";
     }
 }
