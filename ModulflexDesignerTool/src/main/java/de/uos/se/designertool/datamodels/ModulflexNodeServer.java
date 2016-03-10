@@ -316,14 +316,7 @@ public class ModulflexNodeServer
     @Override
     public String toString()
     {
-        return "ModulflexNodeServer{" +
-                "cycleTime=" + cycleTime +
-                ", profiling=" + profiling +
-                ", logDir=" + logDir +
-                ", logLevel=" + logLevel +
-                ", noLog=" + noLog +
-                ", children=" + children +
-                '}';
+        return this.nameProperty().get();
     }
 
 
