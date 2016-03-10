@@ -58,6 +58,7 @@ public class NewnsPresenter
             data.logDirProperty().bindBidirectional(logDir.textProperty());
             data.logLevelProperty().bindBidirectional(logLevel.textProperty());
             data.noLogProperty().bindBidirectional(noLog.selectedProperty());
+            data.nameProperty().addListener((observable, oldValue, newValue) -> elementChangedModule.fireEvent(data));
         });
     }
 
