@@ -51,6 +51,7 @@ public class NewnodePresenter
 
     @FXML
     private Button addModule;
+    
     private ModulflexNode currentNode;
     private DocumentBuilder documentBuilder;
     private DefaultWidgetFactory widgetFactory;
@@ -113,7 +114,7 @@ public class NewnodePresenter
     }
 
     @FXML
-    public void addModule()
+    public void addModule2()
     {
         Pane root = new VBox();
         File selectedItem = moduleFC.getSelectionModel().getSelectedItem();

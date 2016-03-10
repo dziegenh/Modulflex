@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Nodeserver xsi:noNamespaceSchemaLocation="src/main/resources/config/schema.xsd" xmlns="ns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <children>
+        <node id="0" name="n4">
+            <children>
+                <module id="0" name="Module" parameterFile="C:/Users/dziegenhagen/Documents/NetBeansProjects/Modulflex/ModulflexDesignerTool/target/classes/config/components/AnalogDigitalConverter.xsd"/>
+            </children>
+        </node>
+    </children>
+    <configuration cycleTime="1.0" logDir="2" logLevel="3" noLog="true" profiling="true"/>
+</Nodeserver>

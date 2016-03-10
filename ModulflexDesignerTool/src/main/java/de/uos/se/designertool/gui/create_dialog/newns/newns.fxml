@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="402.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40"
-            fx:controller="de.uos.se.designertool.gui.create_dialog.newns.NewnsPresenter">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="402.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uos.se.designertool.gui.create_dialog.newns.NewnsPresenter">
    <children>
       <GridPane layoutX="14.0" layoutY="82.0" prefHeight="197.0" prefWidth="574.0" AnchorPane.bottomAnchor="110.0" AnchorPane.topAnchor="110.0">
         <columnConstraints>
@@ -35,10 +35,9 @@
                   <Font size="18.0" />
                </font>
             </Label>
-             <TextField fx:id="nameField" GridPane.columnIndex="1"/>
-             <TextField fx:id="cycleTime" prefHeight="25.0" prefWidth="240.0" GridPane.columnIndex="1"
-                        GridPane.rowIndex="1"/>
-             <CheckBox fx:id="profilingBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+             <TextField fx:id="nameField" GridPane.columnIndex="1" />
+             <TextField fx:id="cycleTime" prefHeight="25.0" prefWidth="240.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+             <CheckBox fx:id="profilingBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label text="Log Dir" GridPane.rowIndex="3">
                <font>
                   <Font size="18.0" />
@@ -54,15 +53,11 @@
                   <Font size="18.0" />
                </font>
             </Label>
-             <TextField fx:id="logDir" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-             <TextField fx:id="logLevel" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
-             <CheckBox fx:id="noLog" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+             <TextField fx:id="logDir" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+             <TextField fx:id="logLevel" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+             <CheckBox fx:id="noLog" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
       </GridPane>
-       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="+" onAction="#addNode">
-           <font>
-               <Font size="18.0"/>
-           </font>
-       </Button>
+       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#addNode" text="+" />
    </children>
 </AnchorPane>
