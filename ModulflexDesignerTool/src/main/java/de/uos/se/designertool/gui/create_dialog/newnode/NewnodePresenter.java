@@ -36,6 +36,7 @@ import java.util.ResourceBundle;
 public class NewnodePresenter
         implements Initializable
 {
+    public static final String XSD_FILE_TYPE = ".xsd";
     @Inject
     ModulflexNodeSelectedModule nodeSelected;
     @Inject
@@ -109,7 +110,7 @@ public class NewnodePresenter
         File dir = new File(xsdFilesname);
         System.out.println(dir.canRead());
         System.out.println(dir);
-        moduleFC.getItems().addAll(dir.listFiles(f -> f.isFile() && f.toString().endsWith(".xsd")));
+        moduleFC.getItems().addAll(dir.listFiles(f -> f.isFile() && f.toString().endsWith(XSD_FILE_TYPE)));
         moduleFC.getSelectionModel().selectFirst();
     }
 
@@ -125,7 +126,11 @@ public class NewnodePresenter
         {
             RootModel rootModel = widgetFactory.parseXsd(documentBuilder.parse(selectedItem), root,
                                                          selectedItem.getPath().replaceAll("\\" + File.separator, "/"));
-            ModulflexModule module = new ModulflexModule(globalID++, "Module", selectedItem, rootModel);
+            String absolutePath = selectedItem.getAbsolutePath();
+            int beginIndex = absolutePath.lastIndexOf(File.separator) + 1;
+            String name = absolutePath
+                    .substring(beginIndex >= 0 ? beginIndex : 0, absolutePath.lastIndexOf(XSD_FILE_TYPE));
+            ModulflexModule module = new ModulflexModule(globalID++, name, selectedItem, rootModel);
             currentNode.modulesProperty().add(module);
             addFromXSD.fireEvent(new Pair<>(module, root));
             componentAddedModule.fireEvent(currentNode);

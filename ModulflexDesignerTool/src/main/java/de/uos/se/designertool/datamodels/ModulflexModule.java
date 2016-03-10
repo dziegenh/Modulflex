@@ -86,6 +86,54 @@ public class ModulflexModule
     /**
      * For JAXB only.
      */
+    private XSDModel get_rootModel()
+    {
+        return this._rootModel.get();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode()
+    {
+        // TODO: include the root model
+        return Objects.hash(this.get_id(), this.get_name(), this.get_parameterFile());
+    }
+
+    /**
+     * Tests for equality according to the rules defined by {@linkplain Object#equals(Object)}.
+     * Only other {@linkplain ModulflexModule}s can be equal and their id, name and parameter file are tested.
+     *
+     * @param o
+     *         The instance to test against.
+     *
+     * @return true if equal.
+     */
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        ModulflexModule that = (ModulflexModule) o;
+
+        if (get_id() != that.get_id())
+            return false;
+        if (! get_name().equals(that.get_name()))
+        {
+            return false;
+        }
+        // TODO: incorporate rootmodel
+        return get_parameterFile().equals(that.get_parameterFile());
+
+    }
+
+    /**
+     * For JAXB only.
+     */
     @XmlAttribute (name = "id")
     private int get_id()
     {
@@ -136,59 +184,11 @@ public class ModulflexModule
     }
 
     /**
-     * For JAXB only.
-     */
-    private XSDModel get_rootModel()
-    {
-        return this._rootModel.get();
-    }
-
-    /**
      * @return A String which describes an instance by name and id.
      */
     @Override
     public String toString()
     {
-        return _name.get() + _id.get();
-    }
-
-    /**
-     * Tests for equality according to the rules defined by {@linkplain Object#equals(Object)}.
-     * Only other {@linkplain ModulflexModule}s can be equal and their id, name and parameter file are tested.
-     *
-     * @param o
-     *         The instance to test against.
-     *
-     * @return true if equal.
-     */
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-
-        ModulflexModule that = (ModulflexModule) o;
-
-        if (get_id() != that.get_id())
-            return false;
-        if (! get_name().equals(that.get_name()))
-        {
-            return false;
-        }
-        // TODO: incorporate rootmodel
-        return get_parameterFile().equals(that.get_parameterFile());
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int hashCode()
-    {
-        // TODO: include the root model
-        return Objects.hash(this.get_id(), this.get_name(), this.get_parameterFile());
+        return _name.get() + " [" + _id.get() + "]";
     }
 }
