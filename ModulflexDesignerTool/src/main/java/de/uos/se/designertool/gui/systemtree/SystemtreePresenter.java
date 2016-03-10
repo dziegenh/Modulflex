@@ -57,10 +57,8 @@ public class SystemtreePresenter
     {
         children = new SimpleListProperty<>();
         current = new SimpleObjectProperty<>();
-        TreeItem<ModulflexSystemElementType> rootItem = new TreeItem<>();
-        rootItem.setExpanded(true);
-        treeView = new TreeView<>(rootItem);
         nodeChangedModule.addListener((data) -> {
+            TreeItem<ModulflexSystemElementType> rootItem = treeView.getRoot();
             rootItem.getChildren().clear();
             for (ModulflexNode node : ns.childrenProperty())
             {
@@ -72,15 +70,19 @@ public class SystemtreePresenter
                 }
             }
         });
-        nodeServerAddedModule.addListener(data -> ns = data);
-        treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            ModulflexSystemElementType value = newValue.getValue();
-            System.out.println(value);
-            logicModule.fireEvent(value);
+        nodeServerAddedModule.addListener(data -> {
+            rootPane.getChildren().remove(treeView);
+            ns = data;
+            TreeItem<ModulflexSystemElementType> newRootItem = new TreeItem<>(ns);
+            newRootItem.setExpanded(true);
+            treeView = new TreeView<>(newRootItem);
+            treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                ModulflexSystemElementType value = newValue.getValue();
+                System.out.println(newValue);
+                logicModule.fireEvent(value);
+            });
+            treeView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+            rootPane.getChildren().add(treeView);
         });
-
-
-        treeView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        rootPane.getChildren().add(treeView);
     }
 }
