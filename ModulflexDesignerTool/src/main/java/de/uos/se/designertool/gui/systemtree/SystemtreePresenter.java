@@ -5,7 +5,7 @@ import de.uos.se.designertool.datamodels.ModulflexNode;
 import de.uos.se.designertool.datamodels.ModulflexNodeServer;
 import de.uos.se.designertool.datamodels.ModulflexSystemElementType;
 import de.uos.se.designertool.logic.ComponentAddedModule;
-import de.uos.se.designertool.logic.NodeChangedModule;
+import de.uos.se.designertool.logic.ElementChangedModule;
 import de.uos.se.designertool.logic.NodeServerAddedModule;
 import de.uos.se.designertool.logic.SystemElementTypeSelectedModule;
 import javafx.beans.property.ListProperty;
@@ -47,7 +47,7 @@ public class SystemtreePresenter
     @Inject
     NodeServerAddedModule nodeServerAddedModule;
     @Inject
-    NodeChangedModule nodeChangedModule;
+    ElementChangedModule elementChangedModule;
 
     @Inject
     ComponentAddedModule componentAddedModule;
@@ -59,6 +59,7 @@ public class SystemtreePresenter
         current = new SimpleObjectProperty<>();
         componentAddedModule.addListener((data) -> {
             TreeItem<ModulflexSystemElementType> rootItem = treeView.getRoot();
+            int index = treeView.getSelectionModel().getSelectedIndex();
             rootItem.getChildren().clear();
             for (ModulflexNode node : ns.childrenProperty())
             {
@@ -68,9 +69,12 @@ public class SystemtreePresenter
                 {
                     nested.getChildren().add(new TreeItem<>(module));
                 }
+                nested.setExpanded(true);
             }
+            rootItem.setExpanded(true);
+            treeView.getSelectionModel().select(index);
         });
-        nodeChangedModule.addListener(data -> treeView.refresh());
+        elementChangedModule.addListener(data -> treeView.refresh());
         nodeServerAddedModule.addListener(data -> {
             rootPane.getChildren().remove(treeView);
             ns = data;

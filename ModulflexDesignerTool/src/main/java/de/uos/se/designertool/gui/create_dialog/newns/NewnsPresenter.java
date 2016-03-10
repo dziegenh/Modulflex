@@ -3,8 +3,8 @@ package de.uos.se.designertool.gui.create_dialog.newns;
 import de.uos.se.designertool.datamodels.ModulflexNode;
 import de.uos.se.designertool.datamodels.ModulflexNodeServer;
 import de.uos.se.designertool.logic.ComponentAddedModule;
+import de.uos.se.designertool.logic.ElementChangedModule;
 import de.uos.se.designertool.logic.ModulflexNodeAddedModule;
-import de.uos.se.designertool.logic.NodeChangedModule;
 import de.uos.se.designertool.logic.NodeServerAddedModule;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,7 +28,7 @@ public class NewnsPresenter
     @Inject
     ComponentAddedModule componentAddedModule;
     @Inject
-    NodeChangedModule nodeChangedModule;
+    ElementChangedModule elementChangedModule;
     @Inject
     ModulflexNodeAddedModule nodeAdded;
     @FXML
@@ -61,12 +61,13 @@ public class NewnsPresenter
         });
     }
 
+    @FXML
     public void addNode()
     {
         ModulflexNode node = new ModulflexNode(globalID++, NEW_NODE);
         nodeServer.childrenProperty().add(node);
         componentAddedModule.fireEvent(node);
         nodeAdded.fireEvent(node);
-        nodeChangedModule.fireEvent(node);
+        elementChangedModule.fireEvent(node);
     }
 }
