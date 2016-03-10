@@ -77,7 +77,11 @@ public class AppPresenter
         {
             throw new RuntimeException(e);
         }
-        nodeServerAddedModule.addListener(data -> ns = data);
+        nodeServerAddedModule.addListener(data -> {
+            ns = data;
+            models.clear();
+            nodeModels.clear();
+        });
         models = new HashMap<>();
         nodeModels = new HashMap<>();
         widgetFactory = new DefaultWidgetFactory();
@@ -125,7 +129,7 @@ public class AppPresenter
         leftContent.getChildren().add(systemTreeView.getView());
         ModulflexNodeServer server = new ModulflexNodeServer();
         nodeServerAddedModule.fireEvent(server);
-        addDummys();
+        //addDummys();
     }
 
 
