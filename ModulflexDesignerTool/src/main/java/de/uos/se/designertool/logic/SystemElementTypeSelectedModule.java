@@ -7,5 +7,7 @@ import de.uos.se.designertool.datamodels.ModulflexSystemElementType;
  *
  * @author Falk Wilke
  */
-public class SystemElementTypeChangedModule extends LogicModule<ModulflexSystemElementType> {
+public class SystemElementTypeSelectedModule
+        extends LogicModule<ModulflexSystemElementType>
+{
 }

@@ -7,7 +7,7 @@ import de.uos.se.designertool.datamodels.ModulflexSystemElementType;
 import de.uos.se.designertool.logic.ComponentAddedModule;
 import de.uos.se.designertool.logic.NodeChangedModule;
 import de.uos.se.designertool.logic.NodeServerAddedModule;
-import de.uos.se.designertool.logic.SystemElementTypeChangedModule;
+import de.uos.se.designertool.logic.SystemElementTypeSelectedModule;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -42,7 +42,7 @@ public class SystemtreePresenter
     ObjectProperty<ModulflexModule> current;
 
     @Inject
-    SystemElementTypeChangedModule logicModule;
+    SystemElementTypeSelectedModule selectElementModule;
 
     @Inject
     NodeServerAddedModule nodeServerAddedModule;
@@ -57,7 +57,7 @@ public class SystemtreePresenter
     {
         children = new SimpleListProperty<>();
         current = new SimpleObjectProperty<>();
-        nodeChangedModule.addListener((data) -> {
+        componentAddedModule.addListener((data) -> {
             TreeItem<ModulflexSystemElementType> rootItem = treeView.getRoot();
             rootItem.getChildren().clear();
             for (ModulflexNode node : ns.childrenProperty())
@@ -70,6 +70,7 @@ public class SystemtreePresenter
                 }
             }
         });
+        nodeChangedModule.addListener(data -> treeView.refresh());
         nodeServerAddedModule.addListener(data -> {
             rootPane.getChildren().remove(treeView);
             ns = data;
@@ -78,11 +79,16 @@ public class SystemtreePresenter
             treeView = new TreeView<>(newRootItem);
             treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
                 ModulflexSystemElementType value = newValue.getValue();
+                System.out.println(oldValue);
                 System.out.println(newValue);
-                logicModule.fireEvent(value);
+                selectElementModule.fireEvent(value);
+
+
             });
-            treeView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-            rootPane.getChildren().add(treeView);
-        });
+                                              treeView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+                                              rootPane.getChildren().add(treeView);
+    }
+
+        );
     }
 }

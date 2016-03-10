@@ -5,11 +5,9 @@ import de.uos.se.designertool.datamodels.ModulflexNode;
 import de.uos.se.designertool.datamodels.ModulflexNodeServer;
 import de.uos.se.designertool.datamodels.ModulflexSystemElementType;
 import de.uos.se.designertool.gui.create_dialog.newNSView;
+import de.uos.se.designertool.gui.create_dialog.newNodeView;
 import de.uos.se.designertool.gui.systemtree.SystemtreeView;
-import de.uos.se.designertool.logic.ComponentAddedModule;
-import de.uos.se.designertool.logic.NodeChangedModule;
-import de.uos.se.designertool.logic.NodeServerAddedModule;
-import de.uos.se.designertool.logic.SystemElementTypeChangedModule;
+import de.uos.se.designertool.logic.*;
 import de.uos.se.xsd2gui.model_generators.*;
 import de.uos.se.xsd2gui.models.RootModel;
 import de.uos.se.xsd2gui.models.XSDModel;
@@ -17,7 +15,6 @@ import de.uos.se.xsd2gui.xsdparser.AbstractWidgetFactory;
 import de.uos.se.xsd2gui.xsdparser.DefaultWidgetFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -52,23 +49,33 @@ public class AppPresenter
     SystemtreeView systemTreeView;
     ModulflexNodeServer ns;
     Map<XSDModel, Pane> models;
-    Map<ModulflexNode, Pane> nodeModels;
+    newNodeView nodeView;
     AbstractWidgetFactory widgetFactory;
     ModulflexSystemElementType currentSelected;
     @Inject
-    SystemElementTypeChangedModule logicModule;
+    SystemElementTypeSelectedModule selectElementModule;
     @Inject
     NodeServerAddedModule nodeServerAddedModule;
     @Inject
     NodeChangedModule nodeChangedModule;
     @Inject
     ComponentAddedModule componentAddedModule;
+    @Inject
+    ModulflexNodeAddedModule nodeAdded;
+    @Inject
+    ModulflexNodeSelectedModule nodeSelected;
     private String XSD_BASE_DIR;
     private DocumentBuilder documentBuilder;
     private newNSView newNSView;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
+    {
+        initState();
+        initListener();
+    }
+
+    private void initState()
     {
         URL configDir = Thread.currentThread().getContextClassLoader().getResource("config");
         // todo check dir existance :)
@@ -79,14 +86,8 @@ public class AppPresenter
         {
             throw new RuntimeException(e);
         }
-        nodeServerAddedModule.addListener(data -> {
-            ns = data;
-            models.clear();
-            nodeModels.clear();
-            newNSView = new newNSView();
-        });
         models = new HashMap<>();
-        nodeModels = new HashMap<>();
+        nodeView = new newNodeView();
         widgetFactory = new DefaultWidgetFactory();
         widgetFactory.addWidgetGenerator(new BasicAttributeParser());
         widgetFactory.addWidgetGenerator(new SimpleTypeParser());
@@ -109,35 +110,35 @@ public class AppPresenter
             throw new RuntimeException(e);
         }
         systemTreeView = new SystemtreeView();
-        //
-        //        currentSelected.addListener((observable1, oldValue1, newValue1) -> {
-        //            System.out.println(observable1);
-        //            rightPane.contentProperty().setValue(models.get().get(observable1.getValue
-        // ().rootModelProperty().get()));
-        //        });
-        logicModule.addListener(element -> {
+        newNSView = new newNSView();
+        rightPane.contentProperty().setValue(newNSView.getView());
+        leftContent.getChildren().add(systemTreeView.getView());
+        ModulflexNodeServer server = new ModulflexNodeServer();
+
+        nodeServerAddedModule.fireEvent(server);
+    }
+
+    private void initListener()
+    {
+        nodeServerAddedModule.addListener(data -> {
+            ns = data;
+            models.clear();
+        });
+        selectElementModule.addListener(element -> {
             if (element instanceof ModulflexModule)
             {
                 rightPane.contentProperty()
                          .setValue(models.get(((ModulflexModule) element).rootModelProperty().getValue()));
             } else if (element instanceof ModulflexNode)
             {
-                Pane v = nodeModels.get((ModulflexNode) element);
-                rightPane.contentProperty().setValue(v);
+                rightPane.contentProperty().setValue(nodeView.getView());
+                nodeSelected.fireEvent((ModulflexNode) element);
             } else if (element instanceof ModulflexNodeServer)
             {
                 rightPane.contentProperty().setValue(newNSView.getView());
             }
         });
-        nodeChangedModule.addListener(data -> nodeModels.put(data, new VBox(10, new Label(data.toString()))));
-
-        leftContent.getChildren().add(systemTreeView.getView());
-        ModulflexNodeServer server = new ModulflexNodeServer();
-
-        nodeServerAddedModule.fireEvent(server);
-        //addDummys();
     }
-
 
     private void addDummys()
     {
