@@ -1,4 +1,4 @@
-package de.uos.se.designertool.gui.create_dialog;
+package de.uos.se.designertool.gui.create_dialog.newns;
 
 import de.uos.se.designertool.datamodels.ModulflexNode;
 import de.uos.se.designertool.datamodels.ModulflexNodeServer;
@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 /**
  * Created by sem on 10.03.2016.
  */
-public class newNSPresenter
+public class NewnsPresenter
         implements Initializable
 {
     public static final String NEW_NODE = "new Node";

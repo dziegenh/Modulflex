@@ -4,8 +4,8 @@ import de.uos.se.designertool.datamodels.ModulflexModule;
 import de.uos.se.designertool.datamodels.ModulflexNode;
 import de.uos.se.designertool.datamodels.ModulflexNodeServer;
 import de.uos.se.designertool.datamodels.ModulflexSystemElementType;
-import de.uos.se.designertool.gui.create_dialog.newNSView;
-import de.uos.se.designertool.gui.create_dialog.newNodeView;
+import de.uos.se.designertool.gui.create_dialog.newns.NewnsView;
+import de.uos.se.designertool.gui.create_dialog.newnode.NewnodeView;
 import de.uos.se.designertool.gui.systemtree.SystemtreeView;
 import de.uos.se.designertool.logic.*;
 import de.uos.se.xsd2gui.model_generators.*;
@@ -49,7 +49,7 @@ public class AppPresenter
     SystemtreeView systemTreeView;
     ModulflexNodeServer ns;
     Map<XSDModel, Pane> models;
-    newNodeView nodeView;
+    NewnodeView nodeView;
     AbstractWidgetFactory widgetFactory;
     ModulflexSystemElementType currentSelected;
     @Inject
@@ -66,7 +66,7 @@ public class AppPresenter
     ModulflexNodeSelectedModule nodeSelected;
     private String XSD_BASE_DIR;
     private DocumentBuilder documentBuilder;
-    private newNSView newNSView;
+    private NewnsView newNSView;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -87,7 +87,7 @@ public class AppPresenter
             throw new RuntimeException(e);
         }
         models = new HashMap<>();
-        nodeView = new newNodeView();
+        nodeView = new NewnodeView();
         widgetFactory = new DefaultWidgetFactory();
         widgetFactory.addWidgetGenerator(new BasicAttributeParser());
         widgetFactory.addWidgetGenerator(new SimpleTypeParser());
@@ -110,7 +110,7 @@ public class AppPresenter
             throw new RuntimeException(e);
         }
         systemTreeView = new SystemtreeView();
-        newNSView = new newNSView();
+        newNSView = new NewnsView();
         rightPane.contentProperty().setValue(newNSView.getView());
         leftContent.getChildren().add(systemTreeView.getView());
         ModulflexNodeServer server = new ModulflexNodeServer();

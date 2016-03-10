@@ -1,4 +1,4 @@
-package de.uos.se.designertool.gui.create_dialog;
+package de.uos.se.designertool.gui.create_dialog.newnode;
 
 import de.uos.se.designertool.datamodels.ModulflexNode;
 import de.uos.se.designertool.logic.ModulflexNodeSelectedModule;
@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
 /**
  * Created by sem on 10.03.2016.
  */
-public class newNodePresenter
+public class NewnodePresenter
         implements Initializable
 {
     @Inject

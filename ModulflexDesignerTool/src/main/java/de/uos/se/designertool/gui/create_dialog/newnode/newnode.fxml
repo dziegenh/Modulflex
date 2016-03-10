@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40"
-            fx:controller="de.uos.se.designertool.gui.create_dialog.newNodePresenter">
+            fx:controller="de.uos.se.designertool.gui.create_dialog.newnode.NewnodePresenter">
    <children>
       <GridPane layoutX="14.0" layoutY="146.0" prefHeight="108.0" prefWidth="574.0">
          <columnConstraints>
