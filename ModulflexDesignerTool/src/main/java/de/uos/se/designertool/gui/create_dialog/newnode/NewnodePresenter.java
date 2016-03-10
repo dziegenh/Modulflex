@@ -9,6 +9,7 @@ import de.uos.se.designertool.logic.ModulflexNodeSelectedModule;
 import de.uos.se.xsd2gui.model_generators.*;
 import de.uos.se.xsd2gui.models.RootModel;
 import de.uos.se.xsd2gui.xsdparser.DefaultWidgetFactory;
+import de.uos.se.xsd2gui.xsdparser.IWidgetGenerator;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -55,6 +56,7 @@ public class NewnodePresenter
     private DefaultWidgetFactory widgetFactory;
     private String XSD_BASE_DIR;
     private int globalID;
+    private IWidgetGenerator lastCustomParser;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -115,6 +117,9 @@ public class NewnodePresenter
     {
         Pane root = new VBox();
         File selectedItem = moduleFC.getSelectionModel().getSelectedItem();
+        widgetFactory.removeWidgetGenerator(lastCustomParser);
+        lastCustomParser = new CustomTypesParser("", selectedItem.getPath());
+        widgetFactory.addWidgetGenerator(lastCustomParser);
         try
         {
             RootModel rootModel = widgetFactory.parseXsd(documentBuilder.parse(selectedItem), root,
